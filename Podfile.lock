@@ -1,0 +1,19 @@
+PODS:
+  - Bolts (1.1.4)
+  - Facebook-iOS-SDK (3.23.0):
+    - Bolts (~> 1.0)
+  - Firebase (2.2.0)
+  - NMRangeSlider (1.2.1)
+
+DEPENDENCIES:
+  - Facebook-iOS-SDK
+  - Firebase (>= 2.2.0)
+  - NMRangeSlider
+
+SPEC CHECKSUMS:
+  Bolts: dd9fb8433d67f5acc3b6b4d1379bbc5513d716c1
+  Facebook-iOS-SDK: 3d65f685348b789e46a9aacf92bfa85b60b63755
+  Firebase: e7a2ea2ffeff99f9c37028b354194dcc9718d36b
+  NMRangeSlider: af83627c6da11b39a6147c223f6674b3c57b5b44
+
+COCOAPODS: 0.35.0.rc2

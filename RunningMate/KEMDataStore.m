@@ -1,0 +1,534 @@
+//
+//  KEMDataStore.m
+//  RunningMate
+//
+//  Created by Karim Mourra on 2/20/15.
+//  Copyright (c) 2015 Karim Mourra. All rights reserved.
+//
+
+#import "KEMDataStore.h"
+
+
+
+@implementation KEMDataStore
+@synthesize managedObjectContext = _managedObjectContext;
+
++ (instancetype)sharedDataManager {
+    static KEMDataStore *_sharedDataManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedDataManager = [[KEMDataStore alloc] init];
+    });
+    
+    return _sharedDataManager;
+}
+
+-(KEMDailyPreference*)createDailyPreference
+{
+    KEMDailyPreference* daysPreference = [NSEntityDescription insertNewObjectForEntityForName:@"KEMDailyPreference" inManagedObjectContext:self.managedObjectContext];
+    
+
+    //note! may have to change this to string Date seen below
+    NSString* date = [self obtainDateStringDDMMYYYY];
+    
+    KEMFbProfileInfo* fbProfileInfo = [self fetchFbProfileInfo];
+    
+    daysPreference.runDate =  date;
+    
+    daysPreference.fbName = fbProfileInfo.fbName;
+    daysPreference.fbLocation = fbProfileInfo.fbLocation;
+    daysPreference.fbGender = fbProfileInfo.fbGender;
+    daysPreference.fbBirthDate = fbProfileInfo.fbBirthDate;
+    daysPreference.fbRelationshipStatus = fbProfileInfo.fbRelationshipStatus;
+    daysPreference.fbProfilePic = fbProfileInfo.fbProfilePic;
+    
+    [self.dailyPreferences setObject:daysPreference forKey:date];
+
+    return daysPreference;
+}
+
+-(NSString*)obtainDateStringDDMMYYYY
+{
+    NSDate *now = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy"];
+    NSString *year = [formatter stringFromDate:now];
+    [formatter setDateFormat:@"MM"];
+    NSString *month = [formatter stringFromDate:now];
+    [formatter setDateFormat:@"dd"];
+    NSString *day = [formatter stringFromDate:now];
+    NSString *date = [day stringByAppendingFormat:@"-%@-%@", month, year];
+    return date;
+}
+
+-(void)addTimeRange:(NSNumber*)lowerValue And: (NSNumber*)upperValue ToPreferenceFor:(NSString*)day
+{
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    dailyPreference.startTime = lowerValue;
+    dailyPreference.endTime = upperValue;
+    [self saveContext];
+}
+
+-(void)addDurationMinTime:(NSNumber*)lowerValue AndMaxTime: (NSNumber*)upperValue ToPreferenceFor:(NSString*)day
+{
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    dailyPreference.durationMin = lowerValue;
+    dailyPreference.durationMax = upperValue;
+    [self saveContext];
+}
+
+-(void)addDistanceFrom:(NSNumber*)distanceMin To: (NSNumber*)distanceMax ToPreferenceFor:(NSString*)day
+{
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    dailyPreference.distanceMin = distanceMin;
+    dailyPreference.distanceMax = distanceMax;
+    [self saveContext];
+}
+
+-(void)addLocationLatitude:(NSNumber*)latitude Longitude:(NSNumber*)longitude AndRadius:(NSNumber*)radius ToPreferenceFor:(NSString*)day
+{
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    
+    //decimals (about 10) are lost when saved to daily preference !!!!!
+    
+    dailyPreference.chosenLatitude = latitude;
+    dailyPreference.chosenLongitude = longitude;
+    dailyPreference.radiusTolerance = radius;
+    [self saveContext];
+}
+
+-(void)addConversationResponse:(NSNumber*)response ToPreferenceFor:(NSString*)day
+{
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    dailyPreference.conversationPreference = response;
+    [self saveContext];
+}
+
+-(void)addPersonalMusicResponse:(NSNumber*)response ToPreferenceFor:(NSString*)day
+{
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    dailyPreference.personalMusicPreference = response;
+    [self saveContext];
+}
+
+
+
+-(void)addPartnerMusicResponse:(NSNumber*)response ToPreferenceFor:(NSString*)day
+{
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    dailyPreference.partnerMusicPreference = response;
+    [self saveContext];
+}
+
+-(void)addAverageSpeedUnit:(NSString*)speedUnit AndSpeedDecimal:(NSString*)speedDecimal ToPreferenceFor:(NSString*)day
+{
+    NSString* combinedSpeed = [speedUnit stringByAppendingFormat:@".%@",speedDecimal];
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
+    dailyPreference.averageSpeedKmH = [formatter numberFromString:combinedSpeed];
+    
+    [self saveContext];
+}
+
+-(void)addFastestSpeedUnit:(NSString*)speedUnit AndSpeedDecimal:(NSString*)speedDecimal ToPreferenceFor:(NSString*)day
+{
+    NSString* combinedSpeed = [speedUnit stringByAppendingFormat:@".%@",speedDecimal];
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
+    dailyPreference.fastestSpeedKmH = [formatter numberFromString:combinedSpeed];
+    
+    [self saveContext];
+}
+
+-(void)addSlowestSpeedUnit:(NSString*)speedUnit AndSpeedDecimal:(NSString*)speedDecimal ToPreferenceFor:(NSString*)day
+{
+    NSString* combinedSpeed = [speedUnit stringByAppendingFormat:@".%@",speedDecimal];
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    
+    dailyPreference.slowestSpeedKmH = [formatter numberFromString:combinedSpeed];
+    
+    [self saveContext];
+}
+
+-(void)addUserName:(NSString*)fbName UserCity:(NSString*)fbCity UserGender:(NSString*)fbGender UserDOB:(NSString*)fbDOB UserRelationship:(NSString*)fbRelationship AndProfilePicture:(NSString*)fbProfilePic ForDate:(NSString*)date
+{
+    KEMFbProfileInfo* fbProfileInfo = [NSEntityDescription insertNewObjectForEntityForName:@"KEMFbProfileInfo" inManagedObjectContext:self.managedObjectContext];
+    fbProfileInfo.fbName = fbName;
+    fbProfileInfo.fbLocation = fbCity;
+    fbProfileInfo.fbGender = fbGender;
+    fbProfileInfo.fbBirthDate = fbDOB;
+    fbProfileInfo.fbRelationshipStatus = fbRelationship;
+    fbProfileInfo.fbProfilePic = fbProfilePic;
+    
+    [self saveContext];
+}
+
+-(void)fetchPreferencesOf:(NSString*)day
+// will we be returning preferences of the specified day ?
+{
+    NSFetchRequest* fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KEMDailyPreference"];
+    
+    NSArray* dailyPreferences = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    self.fetchedDailyPreferences = [[NSMutableArray alloc]initWithArray:dailyPreferences];
+    
+    
+    self.dailyPreferences = [[NSMutableDictionary alloc]init];
+    for (KEMDailyPreference* dayPreference in self.fetchedDailyPreferences)
+    {
+        [self.dailyPreferences setObject:dayPreference forKey:dayPreference.runDate];
+    }
+}
+
+-(KEMFbProfileInfo*)fetchFbProfileInfo
+{
+    NSFetchRequest* fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KEMFbProfileInfo"];
+    NSArray* fbProfiles = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return [fbProfiles lastObject];
+}
+
+
+-(void)fetchMatches
+{
+    self.matchesByDate = [NSMutableDictionary new];
+    NSFetchRequest* fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KEMMatch"];
+    NSArray* fetchedMatches = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    
+    self.matches = [NSMutableArray arrayWithArray:fetchedMatches];
+    
+    
+    for (KEMMatch* match in fetchedMatches)
+    {
+        if (self.matchesByDate[match.runDate])
+        {
+            [ ((NSMutableArray*) self.matchesByDate[match.runDate]) addObject:match];
+        }
+        else
+        {
+            [self.matchesByDate setObject:[NSMutableArray arrayWithObject:match] forKey:match.runDate];
+        }
+    }
+}
+
+
+-(id)returnNSNullIfNil:(id)object
+{
+    if (object)
+    {
+        return object;
+    }
+    else
+    {
+        return [NSNull null];
+    }
+}
+
+-(void)pushPreferencesToParse
+{
+    NSString* date = [self obtainDateStringDDMMYYYY];
+    
+    KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:date];
+    PFGeoPoint* geoPoint = [self createGeoPointWithLatitude:dailyPreference.chosenLatitude AndLongitude:dailyPreference.chosenLongitude];
+    
+    if (dailyPreference.objID)
+    {
+        PFQuery *query = [PFQuery queryWithClassName:@"Preferences"];
+        
+        // Retrieve the object by id
+        [query getObjectInBackgroundWithId:dailyPreference.objID block:^(PFObject *preference, NSError *error)
+        {
+            [self setDailyPreferences:dailyPreference AndGeoPoint:geoPoint ForPreference:preference];
+            [preference saveEventually];
+        }];
+    }
+    else
+    {
+        PFObject *preference = [PFObject objectWithClassName:@"Preferences"];
+        PFUser* currentUser = [PFUser currentUser];
+
+        if (currentUser)
+        {
+            preference[@"user"] = currentUser;
+            [self setDailyPreferences:dailyPreference AndGeoPoint:geoPoint ForPreference:preference];
+            
+            [preference saveEventually:^(BOOL succeeded, NSError *error)
+             {
+                 if (succeeded)
+                 {
+                     [self obtainObjectIdForDailyPreference:dailyPreference];
+                 }
+             }];
+        }
+    }
+    [self checkForMatchesComparingDate:date GeoPoint:geoPoint AndDailyPreference:dailyPreference];
+}
+
+-(void)obtainObjectIdForDailyPreference:(KEMDailyPreference*)dailyPreference
+{
+    NSString* date = [self obtainDateStringDDMMYYYY];
+    [PFCloud callFunctionInBackground:@"obtainObjectIDForUserAtDate"
+                       withParameters:@{@"date": date}
+                                block:^(PFObject *result, NSError *error)
+     {
+         if (!error)
+         {
+             dailyPreference.objID = result.objectId;
+             [self saveContextWithoutPushingToParse];
+             
+             //when it comes to adding dates, make a dictionnary pairing dates to objectId
+         }
+         else
+         {
+             NSLog(@"no funciona!");
+         }
+     }];
+
+}
+
+-(PFGeoPoint*)createGeoPointWithLatitude:(NSNumber*)latitutde AndLongitude:(NSNumber*)longitude
+{
+    PFGeoPoint* geoPoint = [PFGeoPoint geoPointWithLatitude:[latitutde doubleValue] longitude:[longitude doubleValue]];
+    return geoPoint;
+}
+
+-(void)setDailyPreferences:(KEMDailyPreference*)dailyPreference AndGeoPoint:(PFGeoPoint*)geoPoint ForPreference:(PFObject*)preference
+{
+    preference[@"location"] = [self returnNSNullIfNil:geoPoint];
+    
+    preference[@"startTime"] = [self returnNSNullIfNil:dailyPreference.startTime];
+    preference[@"endTime"] = [self returnNSNullIfNil:dailyPreference.endTime];
+    preference[@"durationMin"] = [self returnNSNullIfNil:dailyPreference.durationMin];
+    preference[@"durationMax"] = [self returnNSNullIfNil:dailyPreference.durationMax];
+    preference[@"distanceMin"] = [self returnNSNullIfNil:dailyPreference.distanceMin];
+    preference[@"distanceMax"] = [self returnNSNullIfNil:dailyPreference.distanceMax];
+    preference[@"latitude"] = [self returnNSNullIfNil:dailyPreference.chosenLatitude];
+    preference[@"longitude"] = [self returnNSNullIfNil:dailyPreference.chosenLongitude];
+    preference[@"radius"] = [self returnNSNullIfNil:dailyPreference.radiusTolerance];
+    preference[@"conversation"] = [self returnNSNullIfNil:dailyPreference.conversationPreference];
+    preference[@"personalMusic"] = [self returnNSNullIfNil:dailyPreference.personalMusicPreference];
+    preference[@"partnerMusic"] = [self returnNSNullIfNil:dailyPreference.partnerMusicPreference];
+    preference[@"averageSpeed"] = [self returnNSNullIfNil:dailyPreference.averageSpeedKmH];
+    preference[@"slowestSpeed"] = [self returnNSNullIfNil:dailyPreference.slowestSpeedKmH];
+    preference[@"fastestSpeed"] = [self returnNSNullIfNil:dailyPreference.fastestSpeedKmH];
+    preference[@"date"] = [self returnNSNullIfNil:dailyPreference.runDate];
+    
+    preference[@"fbName"] = [self returnNSNullIfNil:dailyPreference.fbName];
+    preference[@"fbCity"] = [self returnNSNullIfNil:dailyPreference.fbLocation];
+    preference[@"fbGender"] = [self returnNSNullIfNil:dailyPreference.fbGender];
+    preference[@"fbBirthDate"] = [self returnNSNullIfNil:dailyPreference.fbBirthDate];
+    preference[@"fbRelationship"] = [self returnNSNullIfNil:dailyPreference.fbRelationshipStatus];
+    preference[@"fbProfilePic"] = [self returnNSNullIfNil:dailyPreference.fbProfilePic];
+}
+
+-(NSDictionary*)createParametersFrom:(KEMDailyPreference*)dailyPreference AndGeoPoint:(PFGeoPoint*)geoPoint ForDate:(NSString*)date
+{
+    return @{@"date": date,
+             @"distanceMin":[self returnNSNullIfNil:dailyPreference.distanceMin],
+             @"distanceMax":[self returnNSNullIfNil:dailyPreference.distanceMax],
+             @"durationMin":[self returnNSNullIfNil:dailyPreference.durationMin],
+             @"durationMax":[self returnNSNullIfNil:dailyPreference.durationMax],
+             @"startTime":[self returnNSNullIfNil:dailyPreference.startTime],
+             @"endTime":[self returnNSNullIfNil:dailyPreference.endTime],
+             @"conversation":[self returnNSNullIfNil:dailyPreference.conversationPreference],
+             @"personalMusic":[self returnNSNullIfNil:dailyPreference.personalMusicPreference],
+             @"partnerMusic":[self returnNSNullIfNil:dailyPreference.partnerMusicPreference],
+             @"averageSpeed":[self returnNSNullIfNil:dailyPreference.averageSpeedKmH],
+             @"slowestSpeed":[self returnNSNullIfNil:dailyPreference.slowestSpeedKmH],
+             @"fastestSpeed":[self returnNSNullIfNil:dailyPreference.fastestSpeedKmH],
+             @"location":[self returnNSNullIfNil:geoPoint],
+             @"radius":[self returnNSNullIfNil:dailyPreference.radiusTolerance]};
+}
+
+-(void)checkForMatchesComparingDate:(NSString*)date GeoPoint:(PFGeoPoint*)geoPoint AndDailyPreference:(KEMDailyPreference*)dailyPreference
+{
+    [PFCloud callFunctionInBackground:@"findMatches"
+                       withParameters:[self createParametersFrom:dailyPreference AndGeoPoint:geoPoint ForDate:date]
+                                block:^(NSArray *results, NSError *error)
+     {
+         if (!error)
+         {
+             //receiving an array containing PFObjects
+             //result[0][@"location"] to access its geoPoint
+             NSLog(@"----------- %@", results);
+             
+             for (PFObject* result in results)
+             {
+                 PFGeoPoint* geoPointOfMatch = result[@"location"];
+                 CGFloat radiusOfMatch = [result[@"radius"] floatValue];
+                 CGFloat matchDistance = [geoPoint distanceInKilometersTo:geoPointOfMatch];
+                 CGFloat tolerableDistance = [dailyPreference.radiusTolerance floatValue] + radiusOfMatch;
+                 
+                 if (matchDistance <= tolerableDistance)
+                 {
+                     KEMMatch* match = [self createKEMMatchFromResult:result];
+                     
+                     [self checkForDuplicatedAndAddMatch:match];
+                     
+                     [self saveContextWithoutPushingToParse];
+                 }
+             }
+             //             return matches;
+             //when it comes to adding dates, make a dictionnary pairing dates to objectId
+         }
+         else
+         {
+             NSLog(@"no funciona!");
+         }
+     }];
+}
+
+-(KEMMatch*)createKEMMatchFromResult:(PFObject*)result
+{
+    KEMMatch* match = [NSEntityDescription insertNewObjectForEntityForName:@"KEMMatch" inManagedObjectContext:self.managedObjectContext];
+    
+    PFUser* user = result[@"user"];
+    
+    match.objID = user.objectId;
+    match.conversationPreference = result[@"conversation"];
+    match.runDate = result[@"date"];
+    match.durationMax = result[@"durationMax"];
+    match.durationMin = result[@"durationMin"];
+    match.endTime = result[@"endTime"];
+    match.chosenLatitude = result[@"latitude"];
+    match.chosenLongitude = result[@"longitude"];
+    match.partnerMusicPreference = result[@"partnerMusic"];
+    match.personalMusicPreference = result[@"personalMusic"];
+    match.radiusTolerance = result[@"radius"];
+    match.startTime = result[@"startTime"];
+    match.averageSpeedKmH = result[@"averageSpeed"];
+    match.distanceMax = result[@"distanceMax"];
+    match.distanceMin = result[@"distanceMin"];
+    match.fastestSpeedKmH = result[@"fastestSpeed"];
+    match.slowestSpeedKmH = result[@"slowestSpeed"];
+    
+    match.fbName = result[@"fbName"];
+    match.fbLocation = result[@"fbCity"];
+    match.fbGender = result[@"fbGender"];
+    match.fbBirthDate = result[@"fbBirthDate"];
+    match.fbRelationshipStatus = result[@"fbRelationship"];
+    match.fbProfilePic= result[@"fbProfilePic"];
+
+    return match;
+}
+-(void)checkForDuplicatedAndAddMatch:(KEMMatch*)match
+{
+    if ( ! self.matches)
+    {
+        [self fetchMatches];
+    }
+    
+
+    
+//    if ( ! self.matchesByDate[match.runDate])
+//    {
+//        [self.matches addObject:match];
+//        [self.matchesByDate setObject:[NSMutableArray arrayWithObject:match] forKey:match.runDate];
+//    }
+//    else
+//    {
+        NSPredicate *objIdPredicate = [NSPredicate predicateWithFormat:@"objID == %@", match.objID];
+        NSArray *filteredArrayByObjId = [self.matches filteredArrayUsingPredicate:objIdPredicate];
+        NSPredicate *datePredicate = [NSPredicate predicateWithFormat:@"runDate == %@", match.runDate];
+        NSArray *filteredArrayByDate = [filteredArrayByObjId filteredArrayUsingPredicate:datePredicate];
+        
+        if ([filteredArrayByDate count] > 0)
+        {
+            NSInteger matchIndex=[self.matches indexOfObject:filteredArrayByDate[0]];
+            [self.managedObjectContext deleteObject:self.matches[matchIndex]];
+            self.matches[matchIndex] = match;
+            
+            NSInteger matchIndexInMatchDate = [self.matchesByDate[match.runDate] indexOfObject:filteredArrayByDate[0]];
+            self.matchesByDate[match.runDate][matchIndexInMatchDate] = match;
+        }
+        else
+        {
+            [self.matches addObject:match];
+            
+            if (self.matchesByDate[match.runDate])
+            {
+                [ ((NSMutableArray*) self.matchesByDate[match.runDate]) addObject:match];
+            }
+            else
+            {
+                [self.matchesByDate setObject:[NSMutableArray arrayWithObject:match] forKey:match.runDate];
+            }
+        }
+//    }
+}
+
+- (void)saveContext
+{
+    NSError *error = nil;
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    if (managedObjectContext != nil) {
+        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+    [self pushPreferencesToParse];
+}
+
+- (void)saveContextWithoutPushingToParse
+{
+    NSError *error = nil;
+    NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    if (managedObjectContext != nil) {
+        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+            // Replace this implementation with code to handle the error appropriately.
+            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            abort();
+        }
+    }
+
+}
+
+#pragma mark - Core Data stack
+
+// Returns the managed object context for the application.
+// If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
+- (NSManagedObjectContext *)managedObjectContext
+{
+    if (_managedObjectContext != nil) {
+        return _managedObjectContext;
+    }
+    
+    
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"runningMate.sqlite"];
+    
+    NSError *error = nil;
+    
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Model" withExtension:@"momd"];
+    NSManagedObjectModel *managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:managedObjectModel];
+    
+    [coordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];
+    if (coordinator != nil) {
+        _managedObjectContext = [[NSManagedObjectContext alloc] init];
+        [_managedObjectContext setPersistentStoreCoordinator:coordinator];
+    }
+    return _managedObjectContext;
+}
+
+
+#pragma mark - Application's Documents directory
+
+// Returns the URL to the application's Documents directory.
+- (NSURL *)applicationDocumentsDirectory
+{
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+
+@end

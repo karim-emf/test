@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14C109" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="KEMDailyPreference" representedClassName="KEMDailyPreference" syncable="YES">
+        <attribute name="averageSpeedKmH" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
+        <attribute name="chosenLatitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="chosenLongitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="conversationPreference" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="distanceMax" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
+        <attribute name="distanceMin" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
+        <attribute name="durationMax" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="durationMin" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="endTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="fastestSpeedKmH" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="fbBirthDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbGender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbLocation" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbProfilePic" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbRelationshipStatus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="objID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="partnerMusicPreference" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="personalMusicPreference" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="radiusTolerance" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="runDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="slowestSpeedKmH" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="KEMFbProfileInfo" representedClassName="KEMFbProfileInfo" syncable="YES">
+        <attribute name="fbBirthDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbGender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbLocation" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbProfilePic" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbRelationshipStatus" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="KEMMatch" representedClassName="KEMMatch" syncable="YES">
+        <attribute name="averageSpeedKmH" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="chosenLatitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="chosenLongitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="conversationPreference" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="distanceMax" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="distanceMin" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="durationMax" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="durationMin" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="endTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="fastestSpeedKmH" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="fbBirthDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbGender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbLocation" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbProfilePic" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fbRelationshipStatus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="objID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="partnerMusicPreference" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="personalMusicPreference" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="radiusTolerance" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="runDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="slowestSpeedKmH" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="KEMDailyPreference" positionX="0" positionY="0" width="128" height="390"/>
+        <element name="KEMMatch" positionX="0" positionY="0" width="128" height="390"/>
+        <element name="KEMFbProfileInfo" positionX="0" positionY="153" width="128" height="133"/>
+    </elements>
+</model>
