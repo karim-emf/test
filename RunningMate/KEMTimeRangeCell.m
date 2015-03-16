@@ -39,11 +39,11 @@
         [timeLabel sizeToFit];
         [self.contentView addSubview:timeLabel];
         
-        self.deleteCell = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width - 20, 35, 20, 20)];
-        self.deleteCell.backgroundColor = [UIColor redColor];
+//        self.deleteCell = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width - 20, 35, 20, 20)];
+//        self.deleteCell.backgroundColor = [UIColor redColor];
         [self setUpTimeRange];
         [self.contentView addSubview:self.timeRange];
-        [self.contentView addSubview:self.deleteCell];
+//        [self.contentView addSubview:self.deleteCell];
         [self.contentView addSubview:self.lowerLabel];
         [self.contentView addSubview:self.upperLabel];
         

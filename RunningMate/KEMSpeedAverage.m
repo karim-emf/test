@@ -6,16 +6,16 @@
 //  Copyright (c) 2015 Karim Mourra. All rights reserved.
 //
 
-#import "KEMSpeedTolerance.h"
+#import "KEMSpeedAverage.h"
 #import "KEMDataStore.h"
 
-@interface KEMSpeedTolerance ()
+@interface KEMSpeedAverage ()
 
 @property (strong, nonatomic) KEMDataStore* dataStore;
 
 @end
 
-@implementation KEMSpeedTolerance
+@implementation KEMSpeedAverage
 
 - (void)awakeFromNib {
     // Initialization code
@@ -75,7 +75,7 @@
     }
     else
     {
-        return 2;
+        return 1;
     }
 }
 
@@ -95,14 +95,15 @@
     }
     else
     {
-        switch(row)
-        {
-            case 0:
-                return @"Km/h";
-            case 1:
-                return @"mph";
-        }
-        return @"";
+                        return @"Km/h";
+//        switch(row)
+//        {
+//            case 0:
+//                return @"Km/h";
+//            case 1:
+//                return @"mph";
+//        }
+//        return @"";
     }
 }
 
@@ -153,7 +154,10 @@
     {
         self.speedDecimal =  [NSString stringWithFormat:@"%d", (int)row * 10];
     }
+    
     [self.dataStore addAverageSpeedUnit:self.speedUnit AndSpeedDecimal:self.speedDecimal ToPreferenceFor:date];
+            NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter postNotificationName:@"averageSpeedSet" object:nil];
 }
 
 

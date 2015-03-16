@@ -34,7 +34,7 @@
     {
 
         UILabel* titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 50, 20)];
-        titleLabel.text = @"Conversation:";
+        titleLabel.text = @"Conversation while running?";
         [titleLabel sizeToFit];
         [self.contentView addSubview:titleLabel];
         

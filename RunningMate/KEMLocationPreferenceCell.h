@@ -23,7 +23,7 @@
 @property(strong, nonatomic) UITextField* searchBar;
 @property(strong, nonatomic) UITextField* radiusToleranceField;
 @property(strong, nonatomic) UILabel* radiusToleranceLabel;
-
+@property(strong, nonatomic) UILabel* locationLabel;
 //@property (nonatomic) id<changePictureProtocol> delegate;
 
 @property(strong, nonatomic) UIButton* searchButton;

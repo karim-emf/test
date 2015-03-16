@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>5643AC94-F9BB-4179-90F8-AC0588613D1C</string>
+	<key>IDESourceControlProjectName</key>
+	<string>RunningMate</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0C5673CC7F5D15AEB3E281AEB436846F00702FBD</key>
+		<string>github.com:karim-emf/test.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>RunningMate.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0C5673CC7F5D15AEB3E281AEB436846F00702FBD</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:karim-emf/test.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0C5673CC7F5D15AEB3E281AEB436846F00702FBD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0C5673CC7F5D15AEB3E281AEB436846F00702FBD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RunningMate</string>
+		</dict>
+	</array>
+</dict>
+</plist>

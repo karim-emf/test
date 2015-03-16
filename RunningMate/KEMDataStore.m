@@ -280,8 +280,12 @@
      {
          if (!error)
          {
-             dailyPreference.objID = result.objectId;
-             [self saveContextWithoutPushingToParse];
+             if (result.objectId)
+             {
+                 dailyPreference.objID = result.objectId;
+                 [self saveContextWithoutPushingToParse];
+             }
+             
              
              //when it comes to adding dates, make a dictionnary pairing dates to objectId
          }
@@ -460,8 +464,20 @@
             {
                 [self.matchesByDate setObject:[NSMutableArray arrayWithObject:match] forKey:match.runDate];
             }
+            [self notifyThatMatchEventOccurredWithTitle:@"You have a new match!" AndMessage:@"Tap the Matches icon to find out who it is!"];
+            
         }
 //    }
+}
+
+-(void) notifyThatMatchEventOccurredWithTitle:(NSString*)title AndMessage:(NSString*)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"Awesome!", nil];
+    [alert show];
 }
 
 - (void)saveContext

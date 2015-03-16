@@ -17,6 +17,7 @@
 @property(strong, nonatomic) UITextField* searchBar;
 @property(strong, nonatomic) UITextField* radiusToleranceField;
 @property(strong, nonatomic) UILabel* radiusToleranceLabel;
+@property(strong, nonatomic) UILabel* measurementLabel;
 
 @property(strong, nonatomic) UIButton* searchButton;
 @property(strong, nonatomic) UITableView* searchResultsTable;

@@ -41,10 +41,10 @@
 
 -(void)setUpLabelsAndTextFields
 {
-    UILabel* distanceLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 50, 20)];
-    distanceLabel.text = @"Distance:";
-    [distanceLabel sizeToFit];
-    [self.contentView addSubview:distanceLabel];
+    self.distanceLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 50, 20)];
+    self.distanceLabel.text = @"Distance:";
+    [self.distanceLabel sizeToFit];
+    [self.contentView addSubview:self.distanceLabel];
     
     self.toLabel = [[UILabel alloc]initWithFrame:CGRectMake(175, 30, 50, 50)];
     self.toLabel.text = @"To:";
@@ -89,6 +89,13 @@
     [self.fromDistance addTarget:self action:@selector(fromDistanceFieldEdited) forControlEvents:UIControlEventEditingChanged];
     [self.contentView addSubview:self.fromDistance];
     [self.contentView bringSubviewToFront:self.fromDistance];
+    
+    [self positionFirstLabel:self.distanceLabel];
+    [self positionFromField];
+    [self positionFromLabel];
+    [self positionToLabel];
+    [self positionToField];
+    [self setUpMeasurementLabel];
 }
 
 -(void)fromDistanceFieldEdited
@@ -183,6 +190,240 @@
 - (IBAction)distanceRangeChanged:(NMRangeSlider*)sender
 {
     [self updateSliderLabels];
+}
+
+-(void) positionFirstLabel:(UILabel*)label
+{
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *labelTop = [NSLayoutConstraint constraintWithItem:label
+                                                                 attribute:NSLayoutAttributeTop
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.contentView
+                                                                 attribute:NSLayoutAttributeTop
+                                                                multiplier:1.0
+                                                                  constant:5.0];
+    
+    NSLayoutConstraint *labeltHeight = [NSLayoutConstraint constraintWithItem:label
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:self.contentView
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                   multiplier:0
+                                                                     constant:20.0];
+    
+    NSLayoutConstraint *labelWidth = [NSLayoutConstraint constraintWithItem:label
+                                                                   attribute:NSLayoutAttributeWidth
+                                                                   relatedBy:NSLayoutRelationEqual
+                                                                      toItem:self.contentView
+                                                                   attribute:NSLayoutAttributeWidth
+                                                                  multiplier:1.0
+                                                                    constant:-10.0];
+    
+    NSLayoutConstraint *labelLeft = [NSLayoutConstraint constraintWithItem:label
+                                                                  attribute:NSLayoutAttributeLeft
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self.contentView
+                                                                  attribute:NSLayoutAttributeLeft
+                                                                 multiplier:1.0
+                                                                   constant:5.0];
+    
+    [self.contentView addConstraints:@[labelLeft,labeltHeight, labelTop, labelWidth]];
+}
+
+-(void) positionFromField
+{
+    self.fromDistance.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *labelY = [NSLayoutConstraint constraintWithItem:self.fromDistance
+                                                                attribute:NSLayoutAttributeCenterY
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.fromLabel
+                                                                attribute:NSLayoutAttributeCenterY
+                                                               multiplier:1.0
+                                                                 constant:0.0];
+    
+    NSLayoutConstraint *labeltHeight = [NSLayoutConstraint constraintWithItem:self.fromDistance
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:self.contentView
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                   multiplier:0
+                                                                     constant:25.0];
+    
+    NSLayoutConstraint *labelWidth = [NSLayoutConstraint constraintWithItem:self.fromDistance
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self.contentView
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                 multiplier:0
+                                                                   constant:50.0];
+    
+    NSLayoutConstraint *labelRight = [NSLayoutConstraint constraintWithItem:self.fromDistance
+                                                                 attribute:NSLayoutAttributeRight
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.contentView
+                                                                 attribute:NSLayoutAttributeCenterX
+                                                                multiplier:1.0
+                                                                  constant:-5.0];
+    
+    [self.contentView addConstraints:@[labelRight,labeltHeight, labelY, labelWidth]];
+}
+
+-(void) positionFromLabel
+{
+//        self.fromLabel = [[UILabel alloc]initWithFrame:CGRectMake(25, 30, 50, 50)];
+    self.fromLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *labelTop = [NSLayoutConstraint constraintWithItem:self.fromLabel
+                                                                attribute:NSLayoutAttributeTop
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.distanceLabel
+                                                                attribute:NSLayoutAttributeBottom
+                                                               multiplier:1.0
+                                                                 constant:5.0];
+    
+    NSLayoutConstraint *labeltHeight = [NSLayoutConstraint constraintWithItem:self.fromLabel
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:self.contentView
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                   multiplier:0
+                                                                     constant:20.0];
+    
+    NSLayoutConstraint *labelWidth = [NSLayoutConstraint constraintWithItem:self.fromLabel
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self.contentView
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                 multiplier:0
+                                                                   constant:50.0];
+    
+    NSLayoutConstraint *labelRight = [NSLayoutConstraint constraintWithItem:self.fromLabel
+                                                                  attribute:NSLayoutAttributeRight
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self.fromDistance
+                                                                  attribute:NSLayoutAttributeLeft
+                                                                 multiplier:1.0
+                                                                   constant:-5.0];
+    
+    [self.contentView addConstraints:@[labelRight,labeltHeight, labelTop, labelWidth]];
+}
+
+-(void) positionToLabel
+{
+    //        self.fromLabel = [[UILabel alloc]initWithFrame:CGRectMake(25, 30, 50, 50)];
+    self.toLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *labelTop = [NSLayoutConstraint constraintWithItem:self.toLabel
+                                                                attribute:NSLayoutAttributeTop
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.distanceLabel
+                                                                attribute:NSLayoutAttributeBottom
+                                                               multiplier:1.0
+                                                                 constant:5.0];
+    
+    NSLayoutConstraint *labeltHeight = [NSLayoutConstraint constraintWithItem:self.toLabel
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:self.contentView
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                   multiplier:0
+                                                                     constant:20.0];
+    
+    NSLayoutConstraint *labelWidth = [NSLayoutConstraint constraintWithItem:self.toLabel
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self.contentView
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                 multiplier:0
+                                                                   constant:25.0];
+    
+    NSLayoutConstraint *labelLeft = [NSLayoutConstraint constraintWithItem:self.toLabel
+                                                                  attribute:NSLayoutAttributeLeft
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self.contentView
+                                                                  attribute:NSLayoutAttributeCenterX
+                                                                 multiplier:1.0
+                                                                   constant:5.0];
+    
+    [self.contentView addConstraints:@[labelLeft,labeltHeight, labelTop, labelWidth]];
+}
+
+-(void) positionToField
+{
+    self.toDistance.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *labelY = [NSLayoutConstraint constraintWithItem:self.toDistance
+                                                                attribute:NSLayoutAttributeCenterY
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.fromLabel
+                                                                attribute:NSLayoutAttributeCenterY
+                                                               multiplier:1.0
+                                                                 constant:0.0];
+    
+    NSLayoutConstraint *labeltHeight = [NSLayoutConstraint constraintWithItem:self.toDistance
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:self.contentView
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                   multiplier:0
+                                                                     constant:25.0];
+    
+    NSLayoutConstraint *labelWidth = [NSLayoutConstraint constraintWithItem:self.toDistance
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self.contentView
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                 multiplier:0
+                                                                   constant:50.0];
+    
+    NSLayoutConstraint *labelLeft = [NSLayoutConstraint constraintWithItem:self.toDistance
+                                                                  attribute:NSLayoutAttributeLeft
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self.toLabel
+                                                                  attribute:NSLayoutAttributeRight
+                                                                 multiplier:1.0
+                                                                   constant:5.0];
+    
+    [self.contentView addConstraints:@[labelLeft,labeltHeight, labelY, labelWidth]];
+}
+
+-(void)setUpMeasurementLabel
+{
+    self.measurementLabel = [[UILabel alloc]init];
+    self.measurementLabel.text = @"KMs";
+    self.measurementLabel.backgroundColor = [UIColor clearColor];
+    [self.measurementLabel sizeToFit];
+    [self.contentView addSubview:self.measurementLabel];
+    self.measurementLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    
+    NSLayoutConstraint *radiusToleranceLabelHeight = [NSLayoutConstraint constraintWithItem:self.measurementLabel
+                                                                                  attribute:NSLayoutAttributeHeight
+                                                                                  relatedBy:NSLayoutRelationEqual
+                                                                                     toItem:self.fromLabel
+                                                                                  attribute:NSLayoutAttributeHeight
+                                                                                 multiplier:1.0
+                                                                                   constant:0.0];
+    
+    NSLayoutConstraint *radiusToleranceLabelCenterY = [NSLayoutConstraint constraintWithItem:self.measurementLabel
+                                                                                   attribute:NSLayoutAttributeCenterY
+                                                                                   relatedBy:NSLayoutRelationEqual
+                                                                                      toItem:self.fromLabel
+                                                                                   attribute:NSLayoutAttributeCenterY
+                                                                                  multiplier:1.0
+                                                                                    constant:0.0];
+    
+    NSLayoutConstraint *radiusToleranceLabelLeft = [NSLayoutConstraint constraintWithItem:self.measurementLabel
+                                                                                 attribute:NSLayoutAttributeLeft
+                                                                                 relatedBy:NSLayoutRelationEqual
+                                                                                    toItem:self.toDistance
+                                                                                 attribute:NSLayoutAttributeRight
+                                                                                multiplier:1.0
+                                                                                  constant:5.0];
+    
+    [self.contentView addConstraints:@[radiusToleranceLabelHeight, radiusToleranceLabelCenterY, radiusToleranceLabelLeft]];
 }
 
 @end

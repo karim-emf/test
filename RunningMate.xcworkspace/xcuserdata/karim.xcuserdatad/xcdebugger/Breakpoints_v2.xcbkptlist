@@ -61,28 +61,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "RunningMate/KEMDaySettings.m"
-            timestampString = "447988970.916548"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "239"
-            endingLineNumber = "239"
-            landmarkName = "-tableView:cellForRowAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "RunningMate/KEMDataStore.m"
-            timestampString = "447828884.504902"
+            timestampString = "448010516.155434"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "439"
-            endingLineNumber = "439"
+            startingLineNumber = "443"
+            endingLineNumber = "443"
             landmarkName = "-checkForDuplicatedAndAddMatch:"
             landmarkType = "5">
          </BreakpointContent>
@@ -94,23 +78,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RunningMate/KEMDataStore.m"
-            timestampString = "447873548.629292"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "444"
-            endingLineNumber = "444"
-            landmarkName = "-checkForDuplicatedAndAddMatch:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RunningMate/KEMDataStore.m"
-            timestampString = "447873548.629292"
+            timestampString = "448010516.155434"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "448"
@@ -126,11 +94,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RunningMate/KEMDataStore.m"
-            timestampString = "447873548.629292"
+            timestampString = "448010516.155434"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "453"
-            endingLineNumber = "453"
+            startingLineNumber = "452"
+            endingLineNumber = "452"
+            landmarkName = "-checkForDuplicatedAndAddMatch:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RunningMate/KEMDataStore.m"
+            timestampString = "448010516.155434"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "457"
+            endingLineNumber = "457"
             landmarkName = "-checkForDuplicatedAndAddMatch:"
             landmarkType = "5">
          </BreakpointContent>
@@ -142,11 +126,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "KEMMatchesTVC.m"
-            timestampString = "447824311.422142"
+            timestampString = "448168104.191644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
+            startingLineNumber = "190"
+            endingLineNumber = "190"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -158,11 +142,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "KEMMatchesTVC.m"
-            timestampString = "447824311.422142"
+            timestampString = "448168104.191644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
             landmarkName = "-tableView:didSelectRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -174,11 +158,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "KEMMatchesTVC.m"
-            timestampString = "447824797.066028"
+            timestampString = "448168104.191644"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
+            startingLineNumber = "225"
+            endingLineNumber = "225"
             landmarkName = "-makeFirebaseRoomNameFromDate:MatchObjID:AndUserObjID:"
             landmarkType = "5">
          </BreakpointContent>
@@ -222,27 +206,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RunningMate/KEMDataStore.m"
-            timestampString = "447873548.629292"
+            timestampString = "448010516.155434"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "465"
             endingLineNumber = "465"
-            landmarkName = "-checkForDuplicatedAndAddMatch:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "RunningMate/KEMDataStore.m"
-            timestampString = "447873680.94757"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "461"
-            endingLineNumber = "461"
             landmarkName = "-checkForDuplicatedAndAddMatch:"
             landmarkType = "5">
          </BreakpointContent>
@@ -381,28 +349,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "RunningMate/KJDMapKitViewController.m"
-            timestampString = "447961804.894713"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "223"
-            endingLineNumber = "223"
-            landmarkName = "-mapView:didSelectAnnotationView:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "RunningMate/KEMLocationPreferenceCell.m"
-            timestampString = "447988559.560367"
+            timestampString = "448161204.76209"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
             landmarkName = "-updateCell"
             landmarkType = "5">
          </BreakpointContent>
@@ -413,13 +365,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "RunningMate/KEMDaySettings.m"
-            timestampString = "447988959.173797"
+            filePath = "RunningMate/KEMDataStore.m"
+            timestampString = "448044136.740207"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "-refreshLocationCell"
+            startingLineNumber = "467"
+            endingLineNumber = "467"
+            landmarkName = "-checkForDuplicatedAndAddMatch:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -429,13 +381,61 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "RunningMate/KEMLocationVC.m"
-            timestampString = "447991624.373807"
+            filePath = "RunningMate/KEMDataStore.m"
+            timestampString = "448142827.351394"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
-            landmarkName = "-doneButtonTapped"
+            startingLineNumber = "475"
+            endingLineNumber = "475"
+            landmarkName = "-notifyThatMatchEventOccurredWithTitle:AndMessage:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "KEMMatchesTVC.m"
+            timestampString = "448168104.191644"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
+            landmarkName = "-tableView:cellForRowAtIndexPath:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RunningMate/UserDetailsViewController.m"
+            timestampString = "448168597.560798"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
+            landmarkName = "-_updateProfileData"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "RunningMate/KEMDataStore.m"
+            timestampString = "448169037.517484"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "332"
+            endingLineNumber = "332"
+            landmarkName = "-setDailyPreferences:AndGeoPoint:ForPreference:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		733FB31E8B598A30BD59F5EB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7563B6B3473612499345ABB8 /* libPods.a */; };
+		8A4665961AB623FA00DE1748 /* paper-piece-minus-7.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A4665951AB623FA00DE1748 /* paper-piece-minus-7.png */; };
+		8A4665991AB6700900DE1748 /* KEMMatchIDCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4665981AB6700900DE1748 /* KEMMatchIDCell.m */; };
+		8A46659C1AB6701B00DE1748 /* KEMMatchDateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A46659B1AB6701B00DE1748 /* KEMMatchDateCell.m */; };
+		8A46659E1AB6807600DE1748 /* genericProfile.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A46659D1AB6807600DE1748 /* genericProfile.png */; };
 		8A4863DA1A7AA4D4002D4039 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4863D91A7AA4D4002D4039 /* main.m */; };
 		8A4863DD1A7AA4D4002D4039 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4863DC1A7AA4D4002D4039 /* AppDelegate.m */; };
 		8A4863E51A7AA4D4002D4039 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A4863E41A7AA4D4002D4039 /* Images.xcassets */; };
@@ -21,7 +25,7 @@
 		8A4864101A7D7543002D4039 /* KEMDurationRangeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48640F1A7D7543002D4039 /* KEMDurationRangeCell.m */; };
 		8A4864131A7D7BA3002D4039 /* KEMConversationPreferenceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4864121A7D7BA3002D4039 /* KEMConversationPreferenceCell.m */; };
 		8A4864161A7D7BD4002D4039 /* KEMLocationPreferenceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4864151A7D7BD4002D4039 /* KEMLocationPreferenceCell.m */; };
-		8A48641C1A7D7C21002D4039 /* KEMSpeedTolerance.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48641B1A7D7C21002D4039 /* KEMSpeedTolerance.m */; };
+		8A48641C1A7D7C21002D4039 /* KEMSpeedAverage.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48641B1A7D7C21002D4039 /* KEMSpeedAverage.m */; };
 		8A48641F1A7D8484002D4039 /* KEMMyMusicPreferenceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A48641E1A7D8484002D4039 /* KEMMyMusicPreferenceCell.m */; };
 		8A4864221A7D8499002D4039 /* KEMPartnerMusicPreferenceCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4864211A7D8499002D4039 /* KEMPartnerMusicPreferenceCell.m */; };
 		8A4E66671A9FEC7400167D59 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4E66651A9FEC7400167D59 /* Parse.framework */; };
@@ -47,7 +51,6 @@
 		8A5B5F171A8EB77400E957E2 /* anonymous-vector-mask.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A5B5F161A8EB77400E957E2 /* anonymous-vector-mask.png */; };
 		8A5B5F191A8EB89200E957E2 /* bt_play.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A5B5F181A8EB89200E957E2 /* bt_play.png */; };
 		8A5B5F1B1A8F2DA800E957E2 /* selectedPin-old.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A5B5F1A1A8F2DA800E957E2 /* selectedPin-old.png */; };
-		8A6FDA8F1AB3AE69004F0DDB /* KEMLocationPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A6FDA8E1AB3AE69004F0DDB /* KEMLocationPicCell.m */; };
 		8A7149DB1A9FDBB200C08498 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7149DA1A9FDBB200C08498 /* AudioToolbox.framework */; };
 		8A7149DD1A9FDBB900C08498 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7149DC1A9FDBB900C08498 /* CFNetwork.framework */; };
 		8A7149DF1A9FDBC100C08498 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7149DE1A9FDBC100C08498 /* CoreGraphics.framework */; };
@@ -111,6 +114,12 @@
 /* Begin PBXFileReference section */
 		05A78243B95B6720152095D7 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		7563B6B3473612499345ABB8 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A4665951AB623FA00DE1748 /* paper-piece-minus-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paper-piece-minus-7.png"; sourceTree = "<group>"; };
+		8A4665971AB6700900DE1748 /* KEMMatchIDCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMMatchIDCell.h; sourceTree = "<group>"; };
+		8A4665981AB6700900DE1748 /* KEMMatchIDCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMMatchIDCell.m; sourceTree = "<group>"; };
+		8A46659A1AB6701B00DE1748 /* KEMMatchDateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMMatchDateCell.h; sourceTree = "<group>"; };
+		8A46659B1AB6701B00DE1748 /* KEMMatchDateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMMatchDateCell.m; sourceTree = "<group>"; };
+		8A46659D1AB6807600DE1748 /* genericProfile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = genericProfile.png; sourceTree = "<group>"; };
 		8A4863D41A7AA4D4002D4039 /* RunningMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunningMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A4863D81A7AA4D4002D4039 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A4863D91A7AA4D4002D4039 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -137,8 +146,8 @@
 		8A4864121A7D7BA3002D4039 /* KEMConversationPreferenceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMConversationPreferenceCell.m; sourceTree = "<group>"; };
 		8A4864141A7D7BD4002D4039 /* KEMLocationPreferenceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMLocationPreferenceCell.h; sourceTree = "<group>"; };
 		8A4864151A7D7BD4002D4039 /* KEMLocationPreferenceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMLocationPreferenceCell.m; sourceTree = "<group>"; };
-		8A48641A1A7D7C21002D4039 /* KEMSpeedTolerance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMSpeedTolerance.h; sourceTree = "<group>"; };
-		8A48641B1A7D7C21002D4039 /* KEMSpeedTolerance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMSpeedTolerance.m; sourceTree = "<group>"; };
+		8A48641A1A7D7C21002D4039 /* KEMSpeedAverage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMSpeedAverage.h; sourceTree = "<group>"; };
+		8A48641B1A7D7C21002D4039 /* KEMSpeedAverage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMSpeedAverage.m; sourceTree = "<group>"; };
 		8A48641D1A7D8484002D4039 /* KEMMyMusicPreferenceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMMyMusicPreferenceCell.h; sourceTree = "<group>"; };
 		8A48641E1A7D8484002D4039 /* KEMMyMusicPreferenceCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMMyMusicPreferenceCell.m; sourceTree = "<group>"; };
 		8A4864201A7D8499002D4039 /* KEMPartnerMusicPreferenceCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMPartnerMusicPreferenceCell.h; sourceTree = "<group>"; };
@@ -169,8 +178,6 @@
 		8A5B5F161A8EB77400E957E2 /* anonymous-vector-mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "anonymous-vector-mask.png"; sourceTree = "<group>"; };
 		8A5B5F181A8EB89200E957E2 /* bt_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bt_play.png; sourceTree = "<group>"; };
 		8A5B5F1A1A8F2DA800E957E2 /* selectedPin-old.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selectedPin-old.png"; sourceTree = "<group>"; };
-		8A6FDA8D1AB3AE69004F0DDB /* KEMLocationPicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMLocationPicCell.h; sourceTree = "<group>"; };
-		8A6FDA8E1AB3AE69004F0DDB /* KEMLocationPicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMLocationPicCell.m; sourceTree = "<group>"; };
 		8A7149DA1A9FDBB200C08498 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8A7149DC1A9FDBB900C08498 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		8A7149DE1A9FDBC100C08498 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -384,16 +391,14 @@
 				8A48640C1A7C4B6C002D4039 /* KEMDistanceRangeCell.m */,
 				8A4864141A7D7BD4002D4039 /* KEMLocationPreferenceCell.h */,
 				8A4864151A7D7BD4002D4039 /* KEMLocationPreferenceCell.m */,
-				8A6FDA8D1AB3AE69004F0DDB /* KEMLocationPicCell.h */,
-				8A6FDA8E1AB3AE69004F0DDB /* KEMLocationPicCell.m */,
 				8A4864111A7D7BA3002D4039 /* KEMConversationPreferenceCell.h */,
 				8A4864121A7D7BA3002D4039 /* KEMConversationPreferenceCell.m */,
 				8A48641D1A7D8484002D4039 /* KEMMyMusicPreferenceCell.h */,
 				8A48641E1A7D8484002D4039 /* KEMMyMusicPreferenceCell.m */,
 				8A4864201A7D8499002D4039 /* KEMPartnerMusicPreferenceCell.h */,
 				8A4864211A7D8499002D4039 /* KEMPartnerMusicPreferenceCell.m */,
-				8A48641A1A7D7C21002D4039 /* KEMSpeedTolerance.h */,
-				8A48641B1A7D7C21002D4039 /* KEMSpeedTolerance.m */,
+				8A48641A1A7D7C21002D4039 /* KEMSpeedAverage.h */,
+				8A48641B1A7D7C21002D4039 /* KEMSpeedAverage.m */,
 				8ABE91C31AA823C9002836EB /* KEMSpeedSlowest.h */,
 				8ABE91C41AA823C9002836EB /* KEMSpeedSlowest.m */,
 				8ABE91C61AA823DC002836EB /* KEMSpeedFastest.h */,
@@ -402,6 +407,10 @@
 				8ABE99301AAFEDAF00294F42 /* KEMRightMessageCell.m */,
 				8ABE99311AAFEDAF00294F42 /* KEMLeftMessageCell.h */,
 				8ABE99321AAFEDAF00294F42 /* KEMLeftMessageCell.m */,
+				8A4665971AB6700900DE1748 /* KEMMatchIDCell.h */,
+				8A4665981AB6700900DE1748 /* KEMMatchIDCell.m */,
+				8A46659A1AB6701B00DE1748 /* KEMMatchDateCell.h */,
+				8A46659B1AB6701B00DE1748 /* KEMMatchDateCell.m */,
 			);
 			name = "Custom Cells";
 			sourceTree = "<group>";
@@ -459,6 +468,7 @@
 		8A5B5F1C1A8F33C800E957E2 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				8A46659D1AB6807600DE1748 /* genericProfile.png */,
 				8A4E668C1AA5900500167D59 /* write-simple-7.png */,
 				8ABE993B1AB3611E00294F42 /* testPin-old.png */,
 				8ABE99411AB38EB900294F42 /* stdPin.png */,
@@ -468,6 +478,7 @@
 				8A4E66981AA590C900167D59 /* calendar-7.png */,
 				8A4E66961AA5908100167D59 /* message-7.png */,
 				8A4E66941AA5907100167D59 /* note-write-7.png */,
+				8A4665951AB623FA00DE1748 /* paper-piece-minus-7.png */,
 				8A4E66921AA5906000167D59 /* paper-piece-tick-7.png */,
 				8A4E66901AA5905700167D59 /* paper-piece-plus-7.png */,
 				8A4E66811AA5433A00167D59 /* conceBosque.png */,
@@ -592,6 +603,7 @@
 				8ABE91E11AA96925002836EB /* LoginViewController.xib in Resources */,
 				8ABE91E91AA96925002836EB /* login-button-small-pressed@2x.png in Resources */,
 				8ABE99441AB3913D00294F42 /* stdPin-red.png in Resources */,
+				8A46659E1AB6807600DE1748 /* genericProfile.png in Resources */,
 				8ABE91E61AA96925002836EB /* Icon.png in Resources */,
 				8ABE91E31AA96925002836EB /* Default-568h@2x.png in Resources */,
 				8ABE91EB1AA96925002836EB /* login-button-small@2x.png in Resources */,
@@ -609,6 +621,7 @@
 				8A4E666F1AA2255300167D59 /* paper-plane-7.png in Resources */,
 				8ABE91E41AA96925002836EB /* Default.png in Resources */,
 				8ABE91E81AA96925002836EB /* login-button-small-pressed.png in Resources */,
+				8A4665961AB623FA00DE1748 /* paper-piece-minus-7.png in Resources */,
 				8A4863E51A7AA4D4002D4039 /* Images.xcassets in Resources */,
 				8A4E66971AA5908100167D59 /* message-7.png in Resources */,
 				8ABE99401AB38DCD00294F42 /* selectedPin.png in Resources */,
@@ -673,8 +686,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AB70DA11A97DCD700A448D6 /* KEMDayPreferences.m in Sources */,
-				8A6FDA8F1AB3AE69004F0DDB /* KEMLocationPicCell.m in Sources */,
 				8A4864021A7AAFC6002D4039 /* KEMTabBarController.m in Sources */,
+				8A4665991AB6700900DE1748 /* KEMMatchIDCell.m in Sources */,
 				8A4E668B1AA552C200167D59 /* KEMViewController.m in Sources */,
 				8ABE992B1AAFDCC400294F42 /* KEMChatRoomVC.m in Sources */,
 				8ABE91C81AA823DC002836EB /* KEMSpeedFastest.m in Sources */,
@@ -686,12 +699,13 @@
 				8ABE99331AAFEDAF00294F42 /* KEMRightMessageCell.m in Sources */,
 				8AB7FE6F1AACFDEE00C717C9 /* KEMMatch.m in Sources */,
 				8A48640D1A7C4B6C002D4039 /* KEMDistanceRangeCell.m in Sources */,
-				8A48641C1A7D7C21002D4039 /* KEMSpeedTolerance.m in Sources */,
+				8A48641C1A7D7C21002D4039 /* KEMSpeedAverage.m in Sources */,
 				8A4E669C1AA592B400167D59 /* KEMMatchesTVC.m in Sources */,
 				8A4864051A7BD8D5002D4039 /* KEMDaySettings.m in Sources */,
 				8AB7FE691AACFD9600C717C9 /* KEMDailyPreference.m in Sources */,
 				8ABE91C51AA823C9002836EB /* KEMSpeedSlowest.m in Sources */,
 				8A4863FF1A7AAEEB002D4039 /* KEMLoginScreen.m in Sources */,
+				8A46659C1AB6701B00DE1748 /* KEMMatchDateCell.m in Sources */,
 				8A4863DD1A7AA4D4002D4039 /* AppDelegate.m in Sources */,
 				8AE39E931A7F26EF0024DF30 /* KJDMapKitViewController.m in Sources */,
 				8A4E66751AA4F69E00167D59 /* KEMUser.m in Sources */,

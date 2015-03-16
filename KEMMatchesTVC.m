@@ -12,6 +12,8 @@
 #import "KEMChatRoom.h"
 #import <Parse/Parse.h>
 #import "KEMFbProfileInfo.h"
+#import "KEMMatchDateCell.h"
+#import "KEMMatchIDCell.h"
 
 
 
@@ -39,7 +41,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.edgesForExtendedLayout = UIRectEdgeAll;
+    self.tableView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.navigationController.navigationBar.frame) + [UIApplication sharedApplication].statusBarFrame.size.height, 0.0f, CGRectGetHeight(self.tabBarController.tabBar.frame), 0.0f);
     self.dataStore = [KEMDataStore sharedDataManager];
     [self.dataStore fetchMatches];
     self.matches = self.dataStore.matches;
@@ -69,6 +72,17 @@
     return 1;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([[self.matches[indexPath.row] class] isSubclassOfClass:[NSString class]])
+    {
+        return 50;
+    }
+    else
+    {
+        return 100;
+    }
+}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSArray* matchDates = [self.matchesByDate allKeys];
@@ -84,17 +98,45 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell* stdCell = [UITableViewCell new];
-    
     if ([[self.matches[indexPath.row] class] isSubclassOfClass:[NSString class]])
     {
-        stdCell.textLabel.text = self.matches[indexPath.row];
+        KEMMatchDateCell* cell = (KEMMatchDateCell*)[tableView dequeueReusableCellWithIdentifier:@"matchDateCell"];
+        
+        if (cell == nil)
+        {
+            cell = [[KEMMatchDateCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"matchDateCell"];
+        }
+        cell.dateLabel.text = self.matches[indexPath.row];
+        return  cell;
+//        stdCell.textLabel.text = self.matches[indexPath.row];
     }
     else
     {
-        stdCell.textLabel.text =[self shortenName:((KEMMatch*)self.matches[indexPath.row]).fbName];
+        KEMMatchIDCell* cell = (KEMMatchIDCell*)[tableView dequeueReusableCellWithIdentifier:@"matchIDCell"];
+        
+        if (cell == nil)
+        {
+            cell = [[KEMMatchIDCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"matchIDCell"];
+        }
+        cell.nameLabel.text = [self shortenName:((KEMMatch*)self.matches[indexPath.row]).fbName];
+        if ([((KEMMatch*)self.matches[indexPath.row]).fbProfilePic isEqualToString:@"N/A"] || ! ((KEMMatch*)self.matches[indexPath.row]).fbProfilePic)
+        {
+            cell.profilePicView.image = [UIImage imageNamed:@"genericProfile"];
+        }
+        else
+        {
+            cell.profilePicView.image = [self stringToUIImage:((KEMMatch*)self.matches[indexPath.row]).fbProfilePic];
+        }
+        return  cell;
+//        stdCell.textLabel.text =[self shortenName:((KEMMatch*)self.matches[indexPath.row]).fbName];
     }
-    return stdCell;
+}
+
+-(UIImage *)stringToUIImage:(NSString *)string
+{
+    NSData *data = [[NSData alloc]initWithBase64EncodedString:string options:NSDataBase64DecodingIgnoreUnknownCharacters];
+    
+    return [UIImage imageWithData:data];
 }
 
 -(NSString*)shortenName:(NSString*)nameStr
@@ -147,17 +189,20 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    KEMMatch* selectedMatch = self.matches[indexPath.row];
-    self.chatRoom=[[KEMChatRoom alloc]init];
-
-    self.chatRoom.firebaseRoomName= [self makeFirebaseRoomNameFromDate:selectedMatch.runDate MatchObjID:selectedMatch.objID AndUserObjID:[PFUser currentUser].objectId];
-    
-    KEMChatRoomVC *destinationViewController = [KEMChatRoomVC new];
-    destinationViewController.chatRoom=self.chatRoom;
-    destinationViewController.userName = self.userName;
-    destinationViewController.matchDate = ((KEMMatch*)self.matches[indexPath.row]).runDate;
-    destinationViewController.matchName = [self shortenName:((KEMMatch*)self.matches[indexPath.row]).fbName];
-    [self.navigationController pushViewController:destinationViewController animated:YES];
+    if ( ! [[self.matches[indexPath.row] class] isSubclassOfClass:[NSString class]])
+    {
+        KEMMatch* selectedMatch = self.matches[indexPath.row];
+        self.chatRoom=[[KEMChatRoom alloc]init];
+        
+        self.chatRoom.firebaseRoomName= [self makeFirebaseRoomNameFromDate:selectedMatch.runDate MatchObjID:selectedMatch.objID AndUserObjID:[PFUser currentUser].objectId];
+        
+        KEMChatRoomVC *destinationViewController = [KEMChatRoomVC new];
+        destinationViewController.chatRoom=self.chatRoom;
+        destinationViewController.userName = self.userName;
+        destinationViewController.matchDate = ((KEMMatch*)self.matches[indexPath.row]).runDate;
+        destinationViewController.matchName = [self shortenName:((KEMMatch*)self.matches[indexPath.row]).fbName];
+        [self.navigationController pushViewController:destinationViewController animated:YES];
+    }
 }
 
 -(NSString*)makeFirebaseRoomNameFromDate:(NSString*)Date MatchObjID:(NSString*)matchObjID AndUserObjID:(NSString*)userObjID

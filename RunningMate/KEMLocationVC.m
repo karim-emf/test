@@ -36,10 +36,10 @@
     [self setUpRadiusTolerance];
 
     
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self selector:@selector(selectCellForIndex) name:@"pinSelected" object:nil];
-    [notificationCenter addObserver:self selector:@selector(useThisPointButtonTapped) name:@"finishedPointingOnMap" object:nil];
-    [notificationCenter addObserver:self selector:@selector(pointButtonTapped) name:@"startingToPointOnMap" object:nil];
+    self.notificationCenter = [NSNotificationCenter defaultCenter];
+    [self.notificationCenter addObserver:self selector:@selector(selectCellForIndex) name:@"pinSelected" object:nil];
+    [self.notificationCenter addObserver:self selector:@selector(useThisPointButtonTapped) name:@"finishedPointingOnMap" object:nil];
+    [self.notificationCenter addObserver:self selector:@selector(pointButtonTapped) name:@"startingToPointOnMap" object:nil];
     self.dataStore =[KEMDataStore sharedDataManager];
     
     [self setToLastLocation];
@@ -84,7 +84,11 @@
         MKCoordinateRegion chosenRegion = MKCoordinateRegionMake(self.pointAnnotation.coordinate, MKCoordinateSpanMake(0, 0));
         //        [self.showCurrentLocation addTarget:self action:@selector(showVC) forControlEvents:UIControlEventTouchUpInside];
         [self.mapView setRegion:chosenRegion];
-        [self.mapView addAnnotation:self.pointAnnotation];
+        
+        //**********
+//        [self.mapView addAnnotation:self.pointAnnotation];
+        //**********
+        
         //            self.locationCell.delegate = self;
     }
     if (self.preferenceOfTheDay.radiusTolerance)
@@ -168,8 +172,6 @@
             [self.notificationCenter postNotificationName:@"refereshLocationCell" object:nil];
     [self dismissViewControllerAnimated:YES completion:^{
 
-//        [((KEMDaySettings*)self.presentingViewController) refreshLocationCell];
-        [((KEMDaySettings*)self.parentViewController) refreshLocationCell];
     }];
 }
 
@@ -1021,13 +1023,14 @@
 -(void)setUpRadiusTolerance
 {
     [self setUpRadiusLabel];
+    [self setUpMeasurementLabel];
     [self setUpRadiusField];
 }
 
 -(void)setUpRadiusLabel
 {
     self.radiusToleranceLabel = [[UILabel alloc]init];
-    self.radiusToleranceLabel.text = @"Set your radius tolerance:";
+    self.radiusToleranceLabel.text = @"Radius of your tolerance:";
     self.radiusToleranceLabel.backgroundColor = [UIColor clearColor];
     [self.radiusToleranceLabel sizeToFit];
     [self.view addSubview:self.radiusToleranceLabel];
@@ -1120,12 +1123,57 @@
     NSLayoutConstraint *radiusToleranceLabelFieldRight = [NSLayoutConstraint constraintWithItem:self.radiusToleranceField
                                                                                       attribute:NSLayoutAttributeRight
                                                                                       relatedBy:NSLayoutRelationEqual
-                                                                                         toItem:self.view
-                                                                                      attribute:NSLayoutAttributeRight
+                                                                                         toItem:self.measurementLabel
+                                                                                      attribute:NSLayoutAttributeLeft
                                                                                      multiplier:1.0
-                                                                                       constant:-5.0];
+                                                                                       constant:0.0];
+    NSLayoutConstraint *radiusToleranceLabelFieldWidth = [NSLayoutConstraint constraintWithItem:self.radiusToleranceField
+                                                                                      attribute:NSLayoutAttributeWidth
+                                                                                      relatedBy:NSLayoutRelationEqual
+                                                                                         toItem:self.measurementLabel
+                                                                                      attribute:NSLayoutAttributeWidth
+                                                                                     multiplier:1.0
+                                                                                       constant:0.0];
     
-    [self.view addConstraints:@[radiusToleranceFieldBottom, radiusToleranceFieldHeight, radiusToleranceLabelFieldLeft, radiusToleranceLabelFieldRight]];
+    
+    [self.view addConstraints:@[radiusToleranceFieldBottom, radiusToleranceFieldHeight, radiusToleranceLabelFieldLeft, radiusToleranceLabelFieldRight, radiusToleranceLabelFieldWidth]];
+}
+
+-(void)setUpMeasurementLabel
+{
+    self.measurementLabel = [[UILabel alloc]init];
+    self.measurementLabel.text = @"meters";
+    self.measurementLabel.backgroundColor = [UIColor clearColor];
+    [self.measurementLabel sizeToFit];
+    [self.view addSubview:self.measurementLabel];
+    self.measurementLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    
+    NSLayoutConstraint *radiusToleranceLabelHeight = [NSLayoutConstraint constraintWithItem:self.measurementLabel
+                                                                                  attribute:NSLayoutAttributeHeight
+                                                                                  relatedBy:NSLayoutRelationEqual
+                                                                                     toItem:self.radiusToleranceLabel
+                                                                                  attribute:NSLayoutAttributeHeight
+                                                                                 multiplier:1.0
+                                                                                   constant:0.0];
+    
+    NSLayoutConstraint *radiusToleranceLabelCenterY = [NSLayoutConstraint constraintWithItem:self.measurementLabel
+                                                                               attribute:NSLayoutAttributeCenterY
+                                                                               relatedBy:NSLayoutRelationEqual
+                                                                                  toItem:self.radiusToleranceLabel
+                                                                               attribute:NSLayoutAttributeCenterY
+                                                                              multiplier:1.0
+                                                                                constant:0.0];
+    
+    NSLayoutConstraint *radiusToleranceLabelRight = [NSLayoutConstraint constraintWithItem:self.measurementLabel
+                                                                                attribute:NSLayoutAttributeRight
+                                                                                relatedBy:NSLayoutRelationEqual
+                                                                                   toItem:self.view
+                                                                                attribute:NSLayoutAttributeRight
+                                                                               multiplier:1.0
+                                                                                 constant:-5.0];
+    
+    [self.view addConstraints:@[radiusToleranceLabelHeight, radiusToleranceLabelCenterY, radiusToleranceLabelRight]];
 }
 
 -(void)checkForChangeInRadius

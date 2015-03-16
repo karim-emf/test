@@ -36,6 +36,12 @@
     {
         self.backgroundColor = [UIColor clearColor];
         
+        self.locationLabel = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 50, 20)];
+        self.locationLabel.text = @"Location:";
+        [self.locationLabel sizeToFit];
+        [self.contentView addSubview:self.locationLabel];
+        [self positionFirstLabel:self.locationLabel];
+        
 //        [self setUpSearchBar];
 //        [self setUpSearchButton];
         [self setUpMapKitView];
@@ -60,6 +66,45 @@
         self.radiusToleranceField = [[UITextField alloc]init];
     }
     return self;
+}
+
+-(void) positionFirstLabel:(UILabel*)label
+{
+    label.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *labelTop = [NSLayoutConstraint constraintWithItem:label
+                                                                attribute:NSLayoutAttributeTop
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.contentView
+                                                                attribute:NSLayoutAttributeTop
+                                                               multiplier:1.0
+                                                                 constant:5.0];
+    
+    NSLayoutConstraint *labeltHeight = [NSLayoutConstraint constraintWithItem:label
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:self.contentView
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                   multiplier:0
+                                                                     constant:20.0];
+    
+    NSLayoutConstraint *labelWidth = [NSLayoutConstraint constraintWithItem:label
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:self.contentView
+                                                                  attribute:NSLayoutAttributeWidth
+                                                                 multiplier:1.0
+                                                                   constant:-10.0];
+    
+    NSLayoutConstraint *labelLeft = [NSLayoutConstraint constraintWithItem:label
+                                                                 attribute:NSLayoutAttributeLeft
+                                                                 relatedBy:NSLayoutRelationEqual
+                                                                    toItem:self.contentView
+                                                                 attribute:NSLayoutAttributeLeft
+                                                                multiplier:1.0
+                                                                  constant:5.0];
+    
+    [self.contentView addConstraints:@[labelLeft,labeltHeight, labelTop, labelWidth]];
 }
 
 -(void)updateCell
@@ -277,16 +322,16 @@
     NSLayoutConstraint *mapKitTop = [NSLayoutConstraint constraintWithItem:self.mapView
                                                                  attribute:NSLayoutAttributeTop
                                                                  relatedBy:NSLayoutRelationEqual
-                                                                    toItem:self.contentView
-                                                                 attribute:NSLayoutAttributeTop
+                                                                    toItem:self.locationLabel
+                                                                 attribute:NSLayoutAttributeBottom
                                                                 multiplier:1.0
                                                                   constant:5.0];
     
-    NSLayoutConstraint *mapKitHeight = [NSLayoutConstraint constraintWithItem:self.mapView
-                                                                    attribute:NSLayoutAttributeHeight
+    NSLayoutConstraint *mapKitBottom = [NSLayoutConstraint constraintWithItem:self.mapView
+                                                                    attribute:NSLayoutAttributeBottom
                                                                     relatedBy:NSLayoutRelationEqual
                                                                        toItem:self.contentView
-                                                                    attribute:NSLayoutAttributeHeight
+                                                                    attribute:NSLayoutAttributeBottom
                                                                    multiplier:1.0
                                                                      constant:-5.0];
     
@@ -306,7 +351,7 @@
                                                                  multiplier:1.0
                                                                    constant:5.0];
     
-    [self.contentView addConstraints:@[mapKitTop,mapKitHeight,mapKitWidth,mapKitLeft]];
+    [self.contentView addConstraints:@[mapKitTop,mapKitBottom,mapKitWidth,mapKitLeft]];
     
 }
 

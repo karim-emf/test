@@ -255,7 +255,11 @@
     static NSString *plainAnnotationIdentifier = @"plainAnnotationIdentifier";
     static NSString *pointedAnnotationIdentifier = @"pointedAnnotationIdentifier";
     
-    if (self.currentLocationShown)
+    if (annotation == self.mapView.userLocation)
+    {
+        return nil;
+    }
+    else if (self.currentLocationShown)
     {
         MKPinAnnotationView *pinView =
         (MKPinAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:locationAnnotationIdentifier];
@@ -301,10 +305,6 @@
 //        
 //        pinView.image = self.originalPinImage;
 //        return pinView;
-    }
-    else if (annotation == self.mapView.userLocation)
-    {
-        return nil;
     }
     else
     {

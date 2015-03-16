@@ -9,6 +9,7 @@
 #import "KEMLoginScreen.h"
 #import <NMRangeSlider/NMRangeSlider.h>
 #import "UserDetailsViewController.h"
+#import <Parse/Parse.h>
 
 @interface KEMLoginScreen () {
 
@@ -28,7 +29,14 @@
     self = [super init];
     if (self) {
 //        [self.tabBarItem initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:1];
-        [self.tabBarItem initWithTitle:@"Login" image:[UIImage imageNamed:@"paper-piece-tick-7"] selectedImage:nil];
+        if([PFUser currentUser])
+        {
+            [self.tabBarItem initWithTitle:@"Logout" image:[UIImage imageNamed:@"paper-piece-minus-7"] selectedImage:nil];
+        }
+        else
+        {
+            [self.tabBarItem initWithTitle:@"Login" image:[UIImage imageNamed:@"paper-piece-tick-7"] selectedImage:nil];
+        }
     }
     return self;
 }

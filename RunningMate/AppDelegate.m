@@ -95,7 +95,7 @@
 -(void)setUpApp
 {
     KEMTabBarController* tabBarController = [[KEMTabBarController alloc]init];
-    KEMLoginScreen* dayCriteriaView = [KEMLoginScreen new];
+    KEMLoginScreen* loginView = [KEMLoginScreen new];
 //    LoginViewController* dayCriteriaView = [LoginViewController new];
     KEMDaySettings* daySettingsView = [KEMDaySettings new];
     KEMMatchesTVC* matchesTVC = [KEMMatchesTVC new];
@@ -103,7 +103,15 @@
     [[UITabBar appearance] setTintColor:[UIColor whiteColor]];
     [[UITabBar appearance] setBarTintColor:[UIColor colorWithRed:(4/255.0f) green:(74/255.0f) blue:(11/255.0f) alpha:.1]];
     
-    tabBarController.viewControllers = @[dayCriteriaView, daySettingsView, matchesTVC];
+    
+    if ([PFUser currentUser])
+    {
+        tabBarController.viewControllers = @[daySettingsView, matchesTVC, loginView];
+    }
+    else
+    {
+        tabBarController.viewControllers = @[loginView, daySettingsView, matchesTVC];
+    }
     UINavigationController* navController = [[UINavigationController alloc]initWithRootViewController:tabBarController];
     [navController.navigationBar setTintColor:[UIColor clearColor]];
     self.window.rootViewController = navController;

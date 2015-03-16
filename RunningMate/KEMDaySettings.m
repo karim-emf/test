@@ -15,7 +15,7 @@
 #import "KEMConversationPreferenceCell.h"
 #import "KEMMyMusicPreferenceCell.h"
 #import "KEMPartnerMusicPreferenceCell.h"
-#import "KEMSpeedTolerance.h"
+#import "KEMSpeedAverage.h"
 #import "KEMSpeedSlowest.h"
 #import "KEMSpeedFastest.h"
 #import "KEMDataStore.h"
@@ -100,9 +100,9 @@
 
 -(void)refreshLocationCell
 {
-    [self.tableView beginUpdates];
-    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:self.criterias[@"Location"], nil] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
+//    [self.tableView beginUpdates];
+//    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:self.criterias[@"Location"], nil] withRowAnimation:UITableViewRowAnimationNone];
+//    [self.tableView endUpdates];
 }
 
 -(void)setUpTapRecognizers
@@ -130,15 +130,15 @@
 {
 
     self.criterias = @{@"time":times,
+                       @"Distance":@([times count]+0),
+                       @"Location":@([times count]+1),
                        @"Duration":@([times count]+2),
-                       @"Distance":@([times count]+3),
-                       @"Location":@([times count]+4),
-                       @"Conversation":@([times count]+5),
-                       @"MyMusic":@([times count]+6),
-                       @"PartnerMusic":@([times count]+7),
-                       @"averageSpeed":@([times count]+8),
-                       @"slowestSpeed":@([times count]+9),
-                       @"fastestSpeed":@([times count]+10)};
+                       @"Conversation":@([times count]+3),
+                       @"MyMusic":@([times count]+4),
+                       @"PartnerMusic":@([times count]+5),
+                       @"averageSpeed":@([times count]+6),
+                       @"slowestSpeed":@([times count]+7),
+                       @"fastestSpeed":@([times count]+8)};
 }
 
 - (void)didReceiveMemoryWarning
@@ -163,7 +163,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.criterias count]+ [self.times count]+2;
+    return [self.criterias count] + [self.times count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -172,9 +172,13 @@
     {
         return 150;
     }
-    else if (indexPath.row == 2)
+//    else if (indexPath.row == 2)
+//    {
+//        return 50;
+//    }
+    else if (indexPath.row == [self.criterias[@"Distance"] integerValue])
     {
-        return 50;
+        return 65;
     }
     else if (indexPath.row >= [self.criterias[@"averageSpeed"] integerValue] && indexPath.row <= [self.criterias[@"fastestSpeed"] integerValue] )
     {
@@ -220,24 +224,24 @@
     UITableViewCell* stdCell = [UITableViewCell new];
     stdCell.backgroundColor = [UIColor clearColor];
     
-    if (indexPath.row == 0)
-    {
-        return stdCell;
-    }
-    else if (indexPath.row == 2)
-    {
-        UITableViewCell* firstCell = [UITableViewCell new];
-        UIButton* addTime = [[UIButton alloc]initWithFrame:CGRectMake(35, 15, 250, 20)];
-
-        [addTime setTitle:@"Add another Time Range!" forState:UIControlStateNormal];
-        [addTime setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        addTime.backgroundColor = [UIColor orangeColor];
-        [addTime addTarget:self action:@selector(addTimeCell) forControlEvents:UIControlEventTouchUpInside];
-        [firstCell addSubview:addTime];
-        firstCell.backgroundColor = [UIColor clearColor];
-        return firstCell;
-    }
-    else if (indexPath.row <= [self.times count]+1)
+//    if (indexPath.row == 0)
+//    {
+//        return stdCell;
+//    }
+//    else if (indexPath.row == 2)
+//    {
+//        UITableViewCell* firstCell = [UITableViewCell new];
+//        UIButton* addTime = [[UIButton alloc]initWithFrame:CGRectMake(35, 15, 250, 20)];
+//
+//        [addTime setTitle:@"Add another Time Range!" forState:UIControlStateNormal];
+//        [addTime setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        addTime.backgroundColor = [UIColor orangeColor];
+//        [addTime addTarget:self action:@selector(addTimeCell) forControlEvents:UIControlEventTouchUpInside];
+//        [firstCell addSubview:addTime];
+//        firstCell.backgroundColor = [UIColor clearColor];
+//        return firstCell;
+//    }
+    if (indexPath.row == [self.times count]-1)//+1)
     {
         KEMTimeRangeCell* cell = (KEMTimeRangeCell*)[tableView dequeueReusableCellWithIdentifier:@"timeRangeCell"];
         if (cell == nil)
@@ -253,9 +257,9 @@
             cell.timeRange.upperValue = [self.preferenceOfTheDay.endTime floatValue];
             [cell updateSliderLabels];
         }
-        cell.deleteCell.tag = indexPath.row;
-        NSLog(@"at creation, tag: %ld", (long)cell.deleteCell.tag);
-        [cell.deleteCell addTarget:self action:@selector(deleteTimeCell:) forControlEvents:UIControlEventTouchUpInside];
+//        cell.deleteCell.tag = indexPath.row;
+//        NSLog(@"at creation, tag: %ld", (long)cell.deleteCell.tag);
+//        [cell.deleteCell addTarget:self action:@selector(deleteTimeCell:) forControlEvents:UIControlEventTouchUpInside];
         
         return cell;
     }
@@ -385,10 +389,10 @@
     }
     else if (indexPath.row == [self.criterias[@"averageSpeed"] integerValue])
     {
-        KEMSpeedTolerance* cell = (KEMSpeedTolerance*)[tableView dequeueReusableCellWithIdentifier:@"speedToleranceCell"];
+        KEMSpeedAverage* cell = (KEMSpeedAverage*)[tableView dequeueReusableCellWithIdentifier:@"speedToleranceCell"];
         if (cell == nil)
         {
-            cell = [[KEMSpeedTolerance alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"speedToleranceCell"];
+            cell = [[KEMSpeedAverage alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"speedToleranceCell"];
         }
         
         if (self.preferenceOfTheDay.averageSpeedKmH)

@@ -14,6 +14,9 @@
 @property (strong, nonatomic) IBOutlet NMRangeSlider *distanceRange;
 @property (strong, nonatomic) IBOutlet UILabel *lowerLabel;
 @property (strong, nonatomic) IBOutlet UILabel *upperLabel;
+@property(strong, nonatomic) UILabel* measurementLabel;
+
+@property (strong, nonatomic) UILabel* distanceLabel;
 
 @property (strong, nonatomic) UITextField* fromDistance;
 @property (strong, nonatomic) UITextField* toDistance;

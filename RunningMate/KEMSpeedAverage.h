@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface KEMSpeedTolerance : UITableViewCell<UIPickerViewDataSource, UIPickerViewDelegate>
+@interface KEMSpeedAverage : UITableViewCell<UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (strong, nonatomic) UILabel* titleLabel;
 @property (strong,nonatomic) UIPickerView* speedPicker;
