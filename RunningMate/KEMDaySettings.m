@@ -49,6 +49,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.edgesForExtendedLayout = UIRectEdgeAll;
+    self.tableView.contentInset = UIEdgeInsetsMake(/*CGRectGetHeight(self.navigationController.navigationBar.frame)*/ + [UIApplication sharedApplication].statusBarFrame.size.height, 0.0f, CGRectGetHeight(self.tabBarController.tabBar.frame), 0.0f);
+    
+    UIImageView *tileImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"logo"]];
+
+        tileImageView.frame = CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
+        [self.navigationController.navigationBar addSubview:tileImageView];
     
     self.locationManager = [[CLLocationManager alloc] init];
         [self.locationManager  requestWhenInUseAuthorization];
@@ -83,19 +90,28 @@
     self.preferenceOfTheDay = [self.dataStore.dailyPreferences objectForKey:date];
     if (! self.preferenceOfTheDay)
     {
-        [self.dataStore createDailyPreference];
-        self.preferenceOfTheDay = [self.dataStore.dailyPreferences objectForKey:date];
+        self.preferenceOfTheDay =[self.dataStore createDailyPreference];
         //shouldnt this say self.preferenceoftheday = datastore.dailypreferences? (the thing above)
     }
     
-    //not showing up
-    self.navigationController.navigationBarHidden = NO;
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Exit" style:UIBarButtonItemStyleDone target:nil action:nil];
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-
     [notificationCenter addObserver:self selector:@selector(refreshLocationCell) name:@"refereshLocationCell" object:nil];
     
+    if ( ! [PFUser currentUser])
+    {
+        [self alertIfNotLoggedIn];
+    }
     
+}
+
+-(void)alertIfNotLoggedIn
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You are not logged in!"
+                                                    message:@"You can edit your settings but you won't be matched until you log in!"
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"Got it!", nil];
+    [alert show];
 }
 
 -(void)refreshLocationCell
@@ -163,7 +179,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.criterias count] + [self.times count];
+    return [self.criterias count]; //+ [self.times count];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -198,16 +214,14 @@
 //    NSLog(@"time array: \n %@", self.times);
     [self updateCriterias:self.times];
     [self.tableView reloadData];
-    
-    [self showVC];
-
 }
 
 -(void)showVC
 {
     KEMLocationVC* locationVC = [KEMLocationVC new];
-    [self presentViewController:locationVC animated:YES completion:^{
-
+    [self presentViewController:locationVC animated:YES completion:^
+    {
+            self.editCurrentLocationButton.backgroundColor=[UIColor orangeColor];
     }];
 }
 
@@ -319,6 +333,8 @@
              }];
             MKCoordinateRegion chosenRegion = MKCoordinateRegionMake(cell.pointAnnotation.coordinate, MKCoordinateSpanMake(0, 0));
             [cell.showCurrentLocation addTarget:self action:@selector(showVC) forControlEvents:UIControlEventTouchUpInside];
+            [cell.showCurrentLocation addTarget:self action:@selector(editLocationTapped) forControlEvents:UIControlEventTouchDown];
+            self.editCurrentLocationButton = cell.showCurrentLocation;
             [cell.mapView setRegion:chosenRegion];
             [cell.mapView addAnnotation:cell.pointAnnotation];
 //            cell.delegate = self;
@@ -470,6 +486,11 @@
     }
     
     return stdCell;
+}
+
+-(void)editLocationTapped
+{
+    self.editCurrentLocationButton.backgroundColor=[UIColor colorWithRed:0.016 green:0.341 blue:0.22 alpha:0.5];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

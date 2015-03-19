@@ -65,8 +65,8 @@
     [self.dataStore fetchPreferencesOf:date];
     self.preferenceOfTheDay = [self.dataStore.dailyPreferences objectForKey:date];
     
-    if ([self.preferenceOfTheDay.fastestSpeedKmH floatValue] == 0)
-    {
+//    if ([self.preferenceOfTheDay.fastestSpeedKmH floatValue] == 0)
+//    {
         CGFloat speedFloat = [self.preferenceOfTheDay.averageSpeedKmH floatValue];
         NSInteger speedUnit = trunc(speedFloat);
         NSInteger speedDecimal = roundf((speedFloat - speedUnit)*10);
@@ -77,8 +77,8 @@
         [self.speedPicker selectRow:speedUnit inComponent:0 animated:NO];
         [self.speedPicker selectRow:speedDecimal inComponent:2 animated:NO];
         
-        [self.dataStore addFastestSpeedUnit:self.speedUnit AndSpeedDecimal:self.speedDecimal ToPreferenceFor:date];
-    }
+//        [self.dataStore addFastestSpeedUnit:self.speedUnit AndSpeedDecimal:self.speedDecimal ToPreferenceFor:date];
+//    }
 }
 
 -(void)setUpSpeedPicker

@@ -13,6 +13,8 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic) BOOL firstLoad;
 
+@property (nonatomic) BOOL inChatRoom;
+
 
 @end
 

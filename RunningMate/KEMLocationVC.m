@@ -128,6 +128,7 @@
     [self.doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
     [self.doneButton addTarget:self action:@selector(doneButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.doneButton addTarget:self action:@selector(buttonReleased) forControlEvents:UIControlEventTouchDown];
     [self.view addSubview:self.doneButton];
     self.doneButton.translatesAutoresizingMaskIntoConstraints = NO;
     
@@ -168,11 +169,19 @@
 
 -(void)doneButtonTapped
 {
+    self.doneButton.backgroundColor=[UIColor orangeColor];
+    self.doneButton.titleLabel.textColor=[UIColor whiteColor];
+    
     [self locationHasBeenChosen];
             [self.notificationCenter postNotificationName:@"refereshLocationCell" object:nil];
     [self dismissViewControllerAnimated:YES completion:^{
 
     }];
+}
+
+-(void)buttonReleased
+{
+        self.doneButton.backgroundColor=[UIColor colorWithRed:0.016 green:0.341 blue:0.22 alpha:0.5];
 }
 
 -(void)setUpLocationPick
@@ -375,6 +384,8 @@
     [self.searchButton setImage:[UIImage imageNamed:@"search-7"] forState:UIControlStateNormal];
     //    self.searchButton.imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"search-7"]];
     [self.searchButton addTarget:self action:@selector(searchButtonTapped) forControlEvents:UIControlEventTouchUpInside];
+        [self.searchButton addTarget:self action:@selector(searchButtonReleased) forControlEvents:UIControlEventTouchDown];
+    
     [self.view addSubview:self.searchButton];
     self.searchButton.translatesAutoresizingMaskIntoConstraints = NO;
     
@@ -413,6 +424,11 @@
     [self.view addConstraints:@[searchButtonTop,searchButtonHeight,searchButtonRight,searchButtonLeft]];
 }
 
+-(void)searchButtonReleased
+{
+        self.searchButton.backgroundColor=[UIColor orangeColor];
+}
+
 -(void)shortenMap
 {
     [NSLayoutConstraint deactivateConstraints:@[self.mapKitBottom]];
@@ -439,6 +455,7 @@
 
 -(void)searchButtonTapped
 {
+            self.searchButton.backgroundColor=[UIColor clearColor];
     // shorten map and summon table
     [self removeResultsTable];
     
@@ -599,6 +616,7 @@
     self.showCurrentLocation.backgroundColor = [UIColor clearColor];
     self.showCurrentLocation.translatesAutoresizingMaskIntoConstraints = NO;
     [self.showCurrentLocation addTarget:self action:@selector(returnToCurrentPosition) forControlEvents:UIControlEventTouchUpInside];
+        [self.showCurrentLocation addTarget:self action:@selector(currentLocationReleased) forControlEvents:UIControlEventTouchDown];
     [self.mapView addSubview:self.showCurrentLocation];
     
     NSLayoutConstraint* buttomBottom = [NSLayoutConstraint constraintWithItem:self.showCurrentLocation
@@ -636,8 +654,14 @@
     [self.mapView addConstraints:@[buttomBottom, buttomRight, buttomHeight, buttomWidth]];
 }
 
+-(void)currentLocationReleased
+{
+    self.showCurrentLocation.backgroundColor=[UIColor orangeColor];
+}
+
 -(void)returnToCurrentPosition
 {
+    self.showCurrentLocation.backgroundColor = [UIColor clearColor];
     MKCoordinateRegion currentRegion = MKCoordinateRegionMake(self.mapKitView.locationManager.location.coordinate, MKCoordinateSpanMake(0, 0));
     [self.mapView setRegion:currentRegion];
 }

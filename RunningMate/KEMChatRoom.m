@@ -26,7 +26,7 @@
     self.chatNotification = [[UILocalNotification alloc]init];
     self.chatNotification.alertBody = [NSString stringWithFormat:@"You received a new message!"];
     self.chatNotification.soundName = UILocalNotificationDefaultSoundName;
-    self.chatNotification.alertLaunchImage = @"appicon-60@3x";
+//    self.chatNotification.alertLaunchImage = @"appicon-60@3x";
 }
 
 -(void)fetchMessagesFromCloud:(FDataSnapshot *)snapshot withBlock:(void (^)(NSMutableArray *messages))completionBlock
@@ -36,15 +36,17 @@
     if ([snapshot.value isKindOfClass:[NSDictionary class]])
     {
         [messagesArray addObject:snapshot.value];
+        
+        
 //        UIApplicationState appState = [[UIApplication sharedApplication] applicationState];
 //        AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
-//        
+        
 //        if (! appDelegate.chatRoomVCDelegate.currentlyInRoom)
 //        {
 //            [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
 //            [[UIApplication sharedApplication] cancelLocalNotification:self.chatNotification];
 //        }
-//        else if ( appState == UIApplicationStateBackground || appState == UIApplicationStateInactive)
+//        if ( appState == UIApplicationStateBackground || appState == UIApplicationStateInactive)
 //        {
 //            [UIApplication sharedApplication].applicationIconBadgeNumber = 1;
 //            [[UIApplication sharedApplication] presentLocalNotificationNow:self.chatNotification];
@@ -109,6 +111,7 @@
     [self.contentFireBase observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *snapshot) {
         [self fetchMessagesFromCloud:snapshot withBlock:^(NSMutableArray *messages)
          {
+             //chat is received here
              [self.messages addObjectsFromArray:messages];
              
              completionBlock(YES);

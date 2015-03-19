@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6751" systemVersion="14C1510" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="KEMChatMessage" representedClassName="KEMChatMessage" syncable="YES">
+        <attribute name="chatRoomCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="dateSent" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="sender" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="KEMDailyPreference" representedClassName="KEMDailyPreference" syncable="YES">
         <attribute name="averageSpeedKmH" optional="YES" attributeType="Float" defaultValueString="0" syncable="YES"/>
         <attribute name="chosenLatitude" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -15,7 +21,7 @@
         <attribute name="fbGender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fbLocation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fbName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fbProfilePic" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="fbProfilePic" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fbRelationshipStatus" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="partnerMusicPreference" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -30,7 +36,7 @@
         <attribute name="fbGender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fbLocation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fbName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fbProfilePic" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="fbProfilePic" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fbRelationshipStatus" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="KEMMatch" representedClassName="KEMMatch" syncable="YES">
@@ -48,7 +54,7 @@
         <attribute name="fbGender" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fbLocation" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fbName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="fbProfilePic" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="fbProfilePic" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fbRelationshipStatus" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="objID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="partnerMusicPreference" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
@@ -60,7 +66,8 @@
     </entity>
     <elements>
         <element name="KEMDailyPreference" positionX="0" positionY="0" width="128" height="390"/>
-        <element name="KEMFbProfileInfo" positionX="0" positionY="153" width="128" height="135"/>
-        <element name="KEMMatch" positionX="0" positionY="0" width="128" height="390"/>
+        <element name="KEMFbProfileInfo" positionX="0" positionY="153" width="128" height="133"/>
+        <element name="KEMMatch" positionX="0" positionY="0" width="128" height="388"/>
+        <element name="KEMChatMessage" positionX="0" positionY="153" width="128" height="105"/>
     </elements>
 </model>

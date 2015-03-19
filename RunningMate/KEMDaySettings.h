@@ -15,6 +15,7 @@
 @property (strong, nonatomic) UITextField* toDistance;
 @property(strong, nonatomic) UITextField* searchBar;
 @property(strong, nonatomic) UITextField* radiusToleranceField;
+@property(strong,nonatomic) UIButton* editCurrentLocationButton;
 
 //@property(strong, nonatomic) KEMLocationPreferenceCell* locationCell;
 -(void)refreshLocationCell;

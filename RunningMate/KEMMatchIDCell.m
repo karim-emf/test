@@ -30,7 +30,6 @@
         [self createProfilePicView];
         [self positionProfilePicView];
         [self positionFirstLabel:self.nameLabel];
-        self.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
     return self;
 }

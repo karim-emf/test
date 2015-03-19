@@ -1,8 +1,8 @@
 //
-//  KEMMatchesByDate.m
+//  KEMMatch.m
 //  RunningMate
 //
-//  Created by Karim Mourra on 3/8/15.
+//  Created by Karim Mourra on 3/17/15.
 //  Copyright (c) 2015 Karim Mourra. All rights reserved.
 //
 
@@ -20,19 +20,19 @@
 @dynamic durationMax;
 @dynamic durationMin;
 @dynamic endTime;
-@dynamic startTime;
 @dynamic fastestSpeedKmH;
+@dynamic fbBirthDate;
+@dynamic fbGender;
+@dynamic fbLocation;
+@dynamic fbName;
+@dynamic fbProfilePic;
+@dynamic fbRelationshipStatus;
 @dynamic objID;
 @dynamic partnerMusicPreference;
 @dynamic personalMusicPreference;
 @dynamic radiusTolerance;
 @dynamic runDate;
 @dynamic slowestSpeedKmH;
-@dynamic fbName;
-@dynamic fbLocation;
-@dynamic fbGender;
-@dynamic fbBirthDate;
-@dynamic fbRelationshipStatus;
-@dynamic fbProfilePic;
+@dynamic startTime;
 
 @end

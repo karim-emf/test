@@ -156,8 +156,18 @@
     }
     
     [self.dataStore addAverageSpeedUnit:self.speedUnit AndSpeedDecimal:self.speedDecimal ToPreferenceFor:date];
-            NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter postNotificationName:@"averageSpeedSet" object:nil];
+    
+    KEMDailyPreference* dailyPreference = [self.dataStore.dailyPreferences objectForKey:date];
+    
+    if ([dailyPreference.fastestSpeedKmH floatValue] == 0 && [dailyPreference.slowestSpeedKmH floatValue] == 0)
+    {
+        [self.dataStore addFastestSpeedUnit:self.speedUnit AndSpeedDecimal:self.speedDecimal ToPreferenceFor:date];
+        [self.dataStore addSlowestSpeedUnit:self.speedUnit AndSpeedDecimal:self.speedDecimal ToPreferenceFor:date];
+        
+        NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter postNotificationName:@"averageSpeedSet" object:nil];
+    }
+    
 }
 
 

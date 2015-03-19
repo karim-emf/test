@@ -19,7 +19,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *lowerLabel;
 @property (strong, nonatomic) IBOutlet UILabel *upperLabel;
 @property (strong, nonatomic) UIButton* fbButton;
-
+@property (strong, nonatomic) UIImageView* logoView;
 @end
 
 @implementation KEMLoginScreen
@@ -41,16 +41,32 @@
     return self;
 }
 
+- (UIImage*)imageWithImage:(UIImage *)image convertToWidth:(float)width {
+    float ratio = image.size.width / width;
+    float height = image.size.height / ratio;
+    CGSize size = CGSizeMake(width, height);
+    UIGraphicsBeginImageContext(size);
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage * newimage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newimage;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.hidden = YES;
     UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"concepcionJog"]];
+    backgroundImage.contentMode = UIViewContentModeScaleAspectFill;
     backgroundImage.frame=self.view.frame;
+    
+
     self.view.backgroundColor = [UIColor clearColor];
     [self.view addSubview:backgroundImage];
     [self.view sendSubviewToBack:backgroundImage];
     
+    [self setUpLogo];
 
 //--- the parse way
     self.fbButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.center.x, self.view.center.y, (self.view.frame.size.width*0.7f), 50)];
@@ -69,18 +85,123 @@
     {
         [self.fbButton setTitle:@"Log out of Facebook!" forState:UIControlStateNormal];
         [self.fbButton addTarget:self action:@selector(logoutButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
+            [self.fbButton addTarget:self action:@selector(buttonTapped) forControlEvents:UIControlEventTouchDown];
     }
     else
     {
         [self.fbButton setTitle:@"Login with Facebook!" forState:UIControlStateNormal];
         [self.fbButton addTarget:self action:@selector(loginButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
+            [self.fbButton addTarget:self action:@selector(buttonTapped) forControlEvents:UIControlEventTouchDown];
     }
     [self.view addSubview:self.fbButton];
+    [self positionFbButton];
+}
+
+-(void)buttonTapped
+{
+    self.fbButton.backgroundColor=[UIColor colorWithRed:0.016 green:0.341 blue:0.22 alpha:0.5];
+}
+
+-(void)setUpLogo
+{
+    UIImage* resizedLogo = [self imageWithImage:[UIImage imageNamed:@"logo"] convertToWidth:self.view.frame.size.width];
+    self.logoView = [[UIImageView alloc]initWithFrame:CGRectMake(0, self.view.frame.size.height/5, self.view.frame.size.width, 50)];// initWithImage:resizedLogo];
+    self.logoView.image = resizedLogo;
+    [self.view addSubview:self.logoView];
+    
+    self.logoView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *logoHeight = [NSLayoutConstraint constraintWithItem:self.logoView
+                                                                      attribute:NSLayoutAttributeHeight
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:self.view
+                                                                      attribute:NSLayoutAttributeHeight
+                                                                     multiplier:0.0
+                                                                       constant:50];
+    
+    NSLayoutConstraint *logoTop = [NSLayoutConstraint constraintWithItem:self.logoView
+                                                                      attribute:NSLayoutAttributeTop
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:self.view
+                                                                      attribute:NSLayoutAttributeTop
+                                                                     multiplier:1
+                                                                       constant:self.view.frame.size.height/5];
+    
+    NSLayoutConstraint *logoWidth = [NSLayoutConstraint constraintWithItem:self.logoView
+                                                                     attribute:NSLayoutAttributeWidth
+                                                                     relatedBy:NSLayoutRelationEqual
+                                                                        toItem:self.view
+                                                                     attribute:NSLayoutAttributeWidth
+                                                                    multiplier:1.0
+                                                                      constant:0.0];
+    
+    NSLayoutConstraint *logoCenterX = [NSLayoutConstraint constraintWithItem:self.logoView
+                                                                       attribute:NSLayoutAttributeCenterX
+                                                                       relatedBy:NSLayoutRelationEqual
+                                                                          toItem:self.view
+                                                                       attribute:NSLayoutAttributeCenterX
+                                                                      multiplier:1.0
+                                                                        constant:0.0];
+    
+    [self.view addConstraints:@[logoCenterX,logoHeight,logoWidth,logoTop]];
+    
+}
+
+-(void)positionFbButton
+{
+    self.fbButton.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *fbButtonHeight = [NSLayoutConstraint constraintWithItem:self.fbButton
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                    relatedBy:NSLayoutRelationEqual
+                                                                       toItem:self.view
+                                                                    attribute:NSLayoutAttributeHeight
+                                                                   multiplier:0.0
+                                                                     constant:50];
+    
+    NSLayoutConstraint *fbButtonBottom = [NSLayoutConstraint constraintWithItem:self.fbButton
+                                           
+                                                                       attribute:NSLayoutAttributeBottom
+                                                                       relatedBy:NSLayoutRelationEqual
+                                                                          toItem:self.view
+                                                                       attribute:NSLayoutAttributeBottom
+                                                                      multiplier:1.0
+                                                                        constant:-(self.tabBarController.tabBar.frame.size.height * 2)];
+    
+    NSLayoutConstraint *fbButtonWidth = [NSLayoutConstraint constraintWithItem:self.fbButton
+                                                                      attribute:NSLayoutAttributeWidth
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:self.view
+                                                                      attribute:NSLayoutAttributeWidth
+                                                                     multiplier:0.70
+                                                                       constant:0.0];
+    
+    NSLayoutConstraint *fbButtonCenterX = [NSLayoutConstraint constraintWithItem:self.fbButton
+                                                                     attribute:NSLayoutAttributeCenterX
+                                                                     relatedBy:NSLayoutRelationEqual
+                                                                        toItem:self.view
+                                                                     attribute:NSLayoutAttributeCenterX
+                                                                    multiplier:1.0
+                                                                      constant:0.0];
+    
+    [self.view addConstraints:@[fbButtonBottom,fbButtonCenterX,fbButtonHeight,fbButtonWidth]];
+    
 }
 
 - (IBAction)logoutButtonTouchHandler:(id)sender
 {
+    self.fbButton.backgroundColor=[UIColor colorWithRed:(59/255.0) green:(89/255.0) blue:(152/255.0) alpha:1];
+    self.fbButton.titleLabel.textColor=[UIColor whiteColor];
+    
     [PFUser logOut];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log out completed"
+                                                    message:@"Please be aware that matches won't occur until you log back in!"
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"Dismiss", nil];
+    [alert show];
+    
     [self.fbButton setTitle:@"Login with Facebook!" forState:UIControlStateNormal];
     [self.fbButton removeTarget:self action:@selector(logoutButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
     [self.fbButton addTarget:self action:@selector(loginButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
@@ -88,6 +209,8 @@
 
 - (IBAction)loginButtonTouchHandler:(id)sender
 {
+    self.fbButton.backgroundColor=[UIColor colorWithRed:(59/255.0) green:(89/255.0) blue:(152/255.0) alpha:1];
+    self.fbButton.titleLabel.textColor=[UIColor whiteColor];
     // Set permissions required from the facebook user account
     NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"user_location"];
     
@@ -104,18 +227,28 @@
                 NSLog(@"Uh oh. An error occurred: %@", error);
                 errorMessage = [error localizedDescription];
             }
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Log In Error"
-                                                            message:errorMessage
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unsuccessful Login"
+                                                            message:@"Please try again"
                                                            delegate:nil
                                                   cancelButtonTitle:nil
                                                   otherButtonTitles:@"Dismiss", nil];
             [alert show];
-        } else {
+        }
+        else
+        {
             if (user.isNew) {
                 NSLog(@"User with facebook signed up and logged in!");
             } else {
                 NSLog(@"User with facebook logged in!");
             }
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Awesome!"
+                                                            message:@"Your login was successful!"
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"Dismiss", nil];
+            
+            [alert show];
+            
             [self.fbButton setTitle:@"Log out of Facebook!" forState:UIControlStateNormal];
             [self.fbButton removeTarget:self action:@selector(loginButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
             [self.fbButton addTarget:self action:@selector(logoutButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
@@ -131,7 +264,10 @@
 
 - (void)_presentUserDetailsViewControllerAnimated:(BOOL)animated {
     UserDetailsViewController *detailsViewController = [[UserDetailsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    [self.navigationController pushViewController:detailsViewController animated:animated];
+    [self presentViewController:detailsViewController animated:YES completion:^{
+        
+    }];
+//    [self.navigationController pushViewController:detailsViewController animated:animated];
 }
 
 

@@ -1,23 +1,3 @@
-/**
- * Copyright (c) 2014, Parse, LLC. All rights reserved.
- *
- * You are hereby granted a non-exclusive, worldwide, royalty-free license to use,
- * copy, modify, and distribute this software in source code or binary form for use
- * in connection with the web services and APIs provided by Parse.
-
- * As with any software that integrates with the Parse platform, your use of
- * this software is subject to the Parse Terms of Service
- * [https://www.parse.com/about/terms]. This copyright notice shall be
- * included in all copies or substantial portions of the software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- */
 #import "UserDetailsViewController.h"
 
 #import <Parse/Parse.h>
@@ -28,6 +8,7 @@
 @interface UserDetailsViewController ()
 
 @property (strong, nonatomic) KEMDataStore* dataStore;
+@property (strong, nonatomic) UIButton* fbButton;
 
 @end
 
@@ -86,27 +67,44 @@
                                                                     action:@selector(logoutButtonAction:)];
     self.navigationItem.leftBarButtonItem = logoutButton;
     
-    UIButton* fbButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width*0.15f, self.view.frame.size.height * 0.7f, (self.view.frame.size.width*0.7f), 50)];
+self.fbButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.width*0.15f, self.view.frame.size.height * 0.7f, (self.view.frame.size.width*0.7f), 50)];
 
-    fbButton.backgroundColor = [UIColor colorWithRed:(59/255.0) green:(89/255.0) blue:(152/255.0) alpha:1];
-    fbButton.titleLabel.frame = fbButton.frame;
+    self.fbButton.backgroundColor = [UIColor colorWithRed:(59/255.0) green:(89/255.0) blue:(152/255.0) alpha:1];
+    self.fbButton.titleLabel.frame = self.fbButton.frame;
     
-    fbButton.layer.masksToBounds = YES;
-    fbButton.layer.cornerRadius = 10.0f;
+    self.fbButton.layer.masksToBounds = YES;
+    self.fbButton.layer.cornerRadius = 10.0f;
     UIColor *borderColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
-    fbButton.layer.borderColor =[borderColor CGColor];
-    fbButton.layer.borderWidth = 1.0f;
-    [fbButton setTitle:@"Continue!" forState:UIControlStateNormal];
-    fbButton.titleLabel.textColor = [UIColor whiteColor];
-    [fbButton addTarget:self action:@selector(dismissThisView) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:fbButton];
+    self.fbButton.layer.borderColor =[borderColor CGColor];
+    self.fbButton.layer.borderWidth = 1.0f;
+    [self.fbButton setTitle:@"Continue!" forState:UIControlStateNormal];
+    self.fbButton.titleLabel.textColor = [UIColor whiteColor];
+    
+    [self.fbButton addTarget:self action:@selector(dismissThisView) forControlEvents:UIControlEventTouchUpInside];
+    [self.fbButton addTarget:self action:@selector(buttonTapped) forControlEvents:UIControlEventTouchDown];
+
+    [self.view addSubview:self.fbButton];
 
     [self _loadData];
 }
 
+-(void)buttonTapped
+{
+    self.fbButton.backgroundColor=[UIColor colorWithRed:0.016 green:0.341 blue:0.22 alpha:0.5];
+}
 -(void) dismissThisView
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    self.fbButton.backgroundColor=[UIColor colorWithRed:(59/255.0) green:(89/255.0) blue:(152/255.0) alpha:1];
+    self.fbButton.titleLabel.textColor=[UIColor whiteColor];
+
+    [self dismissViewControllerAnimated:YES completion:^{
+        
+        PFInstallation *installation = [PFInstallation currentInstallation];
+        installation[@"user"] = [PFUser currentUser];
+        [installation saveInBackground];
+        
+        [self.dataStore addUserName:self.nameToStore UserCity:self.locationToStore UserGender:self.genderToStore UserDOB:self.bdayToStore UserRelationship:self.relationshipToStore AndProfilePicture:self.pictureToStoreInString ForDate:[self obtainDateStringDDMMYYYY]];
+    }];
 }
 
 #pragma mark -
@@ -214,35 +212,36 @@
 // Set received values if they are not nil and reload the table
 - (void)_updateProfileData
 {
-    NSString* locationToStore = @"N/A";
-    NSString* genderToStore = @"N/A";
-    NSString* bdayToStore = @"N/A";
-    NSString* relationshipToStore = @"N/A";
-    NSString* nameToStore = @"N/A";
-    NSString* pictureToStore = @"N/A";
+    self.locationToStore = @"N/A";
+    self.genderToStore = @"N/A";
+    self.bdayToStore = @"N/A";
+    self.relationshipToStore = @"N/A";
+    self.nameToStore = @"N/A";
+    self.pictureToStoreInString = @"N/A";
+    self.pictureToStore = [NSData new];
 
     NSString *location = [PFUser currentUser][@"profile"][@"location"];
     if (location) {
         self.rowDataArray[0] = location;
-        locationToStore = location;
+        self.locationToStore = location;
     }
 
     NSString *gender = [PFUser currentUser][@"profile"][@"gender"];
     if (gender) {
         self.rowDataArray[1] = gender;
-        genderToStore = gender;
+        self.genderToStore = gender;
     }
 
     NSString *birthday = [PFUser currentUser][@"profile"][@"birthday"];
     if (birthday) {
         self.rowDataArray[2] = birthday;
-        bdayToStore = birthday;
+        self.bdayToStore = birthday;
     }
 
     NSString *relationshipStatus = [PFUser currentUser][@"profile"][@"relationship"];
     if (relationshipStatus) {
         self.rowDataArray[3] = relationshipStatus;
-        relationshipToStore = relationshipStatus;
+        self.relationshipToStore = relationshipStatus;
     }
 
     [self.tableView reloadData];
@@ -251,7 +250,7 @@
     NSString *name = [PFUser currentUser][@"profile"][@"name"];
     if (name) {
         self.headerNameLabel.text = name;
-        nameToStore = name;
+        self.nameToStore = name;
     }
 
     NSString *userProfilePhotoURLString = [PFUser currentUser][@"profile"][@"pictureURL"];
@@ -264,8 +263,13 @@
                                            queue:[NSOperationQueue mainQueue]
                                completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
 
-                                   if (connectionError == nil && data != nil) {
+                                   if (connectionError == nil && data != nil)
+                                   {
+                                       self.dataStore.profilePicInString =[self imageToNSString:[UIImage imageWithData:data]];
+                                       self.pictureToStoreInString = self.dataStore.profilePicInString;
+                                       
                                        self.headerImageView.image = [UIImage imageWithData:data];
+                                       self.imageData = data;
 
                                        // Add a nice corner radius to the image
                                        self.headerImageView.layer.cornerRadius = 8.0f;
@@ -273,15 +277,16 @@
                                    } else {
                                        NSLog(@"Failed to load profile photo.");
                                    }
+                                   
+                                   if (self.headerImageView.image)
+                                   {
+                                       self.pictureToStore = self.imageData;
+                                   }
+                                   
+//                                   [self.dataStore addUserName:self.nameToStore UserCity:self.locationToStore UserGender:self.genderToStore UserDOB:self.bdayToStore UserRelationship:self.relationshipToStore AndProfilePicture:self.pictureToStoreInString ForDate:[self obtainDateStringDDMMYYYY]];
+                                   
                                }];
     }
-    
-    if (self.headerImageView.image)
-    {
-        pictureToStore = [self imageToNSString:self.headerImageView.image];
-    }
-    
-    [self.dataStore addUserName:nameToStore UserCity:locationToStore UserGender:genderToStore UserDOB:bdayToStore UserRelationship:relationshipToStore AndProfilePicture:pictureToStore ForDate:[self obtainDateStringDDMMYYYY]];
 }
 
 -(NSString *)imageToNSString:(UIImage *)image

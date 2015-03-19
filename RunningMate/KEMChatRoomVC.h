@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "KEMChatRoom.h"
+#import <Parse/Parse.h>
 
 @interface KEMChatRoomVC : UIViewController <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate>
 
@@ -18,5 +19,7 @@
 @property (strong, nonatomic) NSString* userName;
 @property (strong, nonatomic) NSString* matchName;
 @property (strong, nonatomic) NSString* matchDate;
+
+@property (strong, nonatomic) PFUser* matchUser;
 
 @end

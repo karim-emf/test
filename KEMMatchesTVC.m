@@ -22,9 +22,11 @@
 @property (strong, nonatomic) KEMDataStore* dataStore;
 @property (strong, nonatomic) NSMutableArray* matches;
 @property (strong, nonatomic) NSMutableDictionary* matchesByDate;
+@property (strong, nonatomic) UIImageView *logoImageView;
 
 @property (strong, nonatomic) KEMChatRoom *chatRoom;
 @property (strong, nonatomic) NSString* userName;
+@property (strong, nonatomic) PFUser* matchUser;
 
 @end
 
@@ -42,7 +44,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.edgesForExtendedLayout = UIRectEdgeAll;
-    self.tableView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.navigationController.navigationBar.frame) + [UIApplication sharedApplication].statusBarFrame.size.height, 0.0f, CGRectGetHeight(self.tabBarController.tabBar.frame), 0.0f);
+    self.tableView.contentInset = UIEdgeInsetsMake(/*CGRectGetHeight(self.navigationController.navigationBar.frame)*/ + [UIApplication sharedApplication].statusBarFrame.size.height, 0.0f, CGRectGetHeight(self.tabBarController.tabBar.frame), 0.0f);
+    
+self.logoImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"logo"]];
+    
+self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
+
+    [self.navigationController.navigationBar addSubview:self.logoImageView];
+//    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+//    [self.navigationController.navigationBar sendSubviewToBack:tileImageView];
+
+    
     self.dataStore = [KEMDataStore sharedDataManager];
     [self.dataStore fetchMatches];
     self.matches = self.dataStore.matches;
@@ -51,12 +63,34 @@
     KEMFbProfileInfo* fbProfileInfo = [self.dataStore fetchFbProfileInfo];
     self.userName = [self shortenName:fbProfileInfo.fbName];
     
+
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    if ( ! [PFUser currentUser])
+    {
+        [self alertIfNotLoggedIn];
+    }
+}
+
+-(void)alertIfNotLoggedIn
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You are not logged in!"
+                                                    message:@"You can chat with existing matches but new matches won't be added until you log in!"
+                                                   delegate:nil
+                                          cancelButtonTitle:nil
+                                          otherButtonTitles:@"Got it!", nil];
+    [alert show];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    self.tabBarController.tabBar.hidden = NO;
+    [self.navigationController.navigationBar bringSubviewToFront:self.logoImageView];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -119,7 +153,8 @@
             cell = [[KEMMatchIDCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"matchIDCell"];
         }
         cell.nameLabel.text = [self shortenName:((KEMMatch*)self.matches[indexPath.row]).fbName];
-        if ([((KEMMatch*)self.matches[indexPath.row]).fbProfilePic isEqualToString:@"N/A"] || ! ((KEMMatch*)self.matches[indexPath.row]).fbProfilePic)
+        
+        if ( ! ((KEMMatch*)self.matches[indexPath.row]).fbProfilePic || [((KEMMatch*)self.matches[indexPath.row]).fbProfilePic isEqualToString:@"N/A"])
         {
             cell.profilePicView.image = [UIImage imageNamed:@"genericProfile"];
         }
@@ -194,14 +229,30 @@
         KEMMatch* selectedMatch = self.matches[indexPath.row];
         self.chatRoom=[[KEMChatRoom alloc]init];
         
-        self.chatRoom.firebaseRoomName= [self makeFirebaseRoomNameFromDate:selectedMatch.runDate MatchObjID:selectedMatch.objID AndUserObjID:[PFUser currentUser].objectId];
+        PFQuery* matchUserQuery= [PFUser query];// queryWithClassName:@"User"];
+        [matchUserQuery whereKey:@"objectId" equalTo:selectedMatch.objID];
+        [matchUserQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+        {
+            if (!error && [objects count]>0)
+            {
+//                PFObject* preference = objects[0];
+                self.matchUser = objects[0];//preference[@"user"];
+            }
+            
+            self.chatRoom.firebaseRoomName= [self makeFirebaseRoomNameFromDate:selectedMatch.runDate MatchObjID:selectedMatch.objID AndUserObjID:[PFUser currentUser].objectId];
+            
+            KEMChatRoomVC *destinationViewController = [KEMChatRoomVC new];
+            destinationViewController.chatRoom=self.chatRoom;
+            destinationViewController.userName = self.userName;
+            destinationViewController.matchDate = ((KEMMatch*)self.matches[indexPath.row]).runDate;
+            destinationViewController.matchName = [self shortenName:((KEMMatch*)self.matches[indexPath.row]).fbName];
+            destinationViewController.matchUser = self.matchUser;
+            
+            [self.navigationController.navigationBar sendSubviewToBack:self.logoImageView];
+            [self.navigationController pushViewController:destinationViewController animated:YES];
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }];
         
-        KEMChatRoomVC *destinationViewController = [KEMChatRoomVC new];
-        destinationViewController.chatRoom=self.chatRoom;
-        destinationViewController.userName = self.userName;
-        destinationViewController.matchDate = ((KEMMatch*)self.matches[indexPath.row]).runDate;
-        destinationViewController.matchName = [self shortenName:((KEMMatch*)self.matches[indexPath.row]).fbName];
-        [self.navigationController pushViewController:destinationViewController animated:YES];
     }
 }
 

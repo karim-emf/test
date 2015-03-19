@@ -13,6 +13,7 @@
 #import "KEMMatch.h"
 #import "KEMFbProfileInfo.h"
 #import <Parse/Parse.h>
+#import "KEMChatMessage.h"
 
 @interface KEMDataStore : NSObject
 
@@ -25,6 +26,9 @@
 
 //@property (strong, nonatomic) PFObject *testObject;
 @property (strong, nonatomic) NSString* objectID;
+@property (strong, nonatomic) NSString* profilePicInString;
+
+@property (nonatomic) BOOL notificationFromParse;
 
 + (instancetype)sharedDataManager;
 
@@ -44,5 +48,10 @@
 -(void)fetchPreferencesOf:(NSString*)day;
 -(KEMFbProfileInfo*)fetchFbProfileInfo;
 -(void)fetchMatches;
+
+-(KEMChatMessage*)createChatMessage:(NSString*)content From:(NSString*)sender For:(NSString*)chatRoomCode Dated:(NSDate*)dateSent;
+-(NSArray*)fetchChatMessagesForChatRoom:(NSString*)chatRoomCode;
+
+-(void)pushPreferencesToParse;
 
 @end

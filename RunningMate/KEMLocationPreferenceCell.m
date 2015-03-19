@@ -371,6 +371,7 @@
     [self.showCurrentLocation setTitle:@"Edit" forState:UIControlStateNormal];
     [self.showCurrentLocation setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
+    
     self.showCurrentLocation.layer.masksToBounds=YES;
     self.showCurrentLocation.layer.cornerRadius=10.0f;
     UIColor *borderColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];

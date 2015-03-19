@@ -25,6 +25,8 @@
 @property(nonatomic) BOOL firstTimeInRoom;
 @property(nonatomic, strong) UILocalNotification* chatNotification;
 
+@property(strong,nonatomic)NSString *matchName;
+
 -(instancetype)init;
 
 -(void)setupFirebaseWithCompletionBlock:(void (^)(BOOL completed))completionBlock;

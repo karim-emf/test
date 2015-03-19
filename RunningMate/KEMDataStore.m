@@ -31,20 +31,71 @@
     //note! may have to change this to string Date seen below
     NSString* date = [self obtainDateStringDDMMYYYY];
     
-    KEMFbProfileInfo* fbProfileInfo = [self fetchFbProfileInfo];
     
-    daysPreference.runDate =  date;
-    
-    daysPreference.fbName = fbProfileInfo.fbName;
-    daysPreference.fbLocation = fbProfileInfo.fbLocation;
-    daysPreference.fbGender = fbProfileInfo.fbGender;
-    daysPreference.fbBirthDate = fbProfileInfo.fbBirthDate;
-    daysPreference.fbRelationshipStatus = fbProfileInfo.fbRelationshipStatus;
-    daysPreference.fbProfilePic = fbProfileInfo.fbProfilePic;
+    if (! self.dailyPreferences)
+    {
+        self.dailyPreferences = [NSMutableDictionary new];
+    }
+    else
+    {
+        KEMFbProfileInfo* fbProfileInfo = [self fetchFbProfileInfo];
+        
+        daysPreference.runDate =  date;
+        
+        daysPreference.fbName = fbProfileInfo.fbName;
+        daysPreference.fbLocation = fbProfileInfo.fbLocation;
+        daysPreference.fbGender = fbProfileInfo.fbGender;
+        daysPreference.fbBirthDate = fbProfileInfo.fbBirthDate;
+        daysPreference.fbRelationshipStatus = fbProfileInfo.fbRelationshipStatus;
+        daysPreference.fbProfilePic = fbProfileInfo.fbProfilePic;
+    }
     
     [self.dailyPreferences setObject:daysPreference forKey:date];
 
     return daysPreference;
+}
+
+-(KEMChatMessage*)createChatMessage:(NSString*)content From:(NSString*)sender For:(NSString*)chatRoomCode Dated:(NSDate*)dateSent
+{
+    KEMChatMessage* chatMessage = [NSEntityDescription insertNewObjectForEntityForName:@"KEMChatMessage" inManagedObjectContext:self.managedObjectContext];
+    chatMessage.content = content;
+    chatMessage.sender = sender;
+    chatMessage.chatRoomCode = chatRoomCode;
+    chatMessage.dateSent = dateSent;
+    
+    [self saveContextWithoutPushingToParse];
+    return chatMessage;
+}
+
+-(NSArray*)fetchChatMessages
+{
+    NSFetchRequest* fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"KEMChatMessage"];
+    NSArray* chatMessages = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    return chatMessages;
+}
+
+-(NSArray*)fetchChatMessagesForChatRoom:(NSString*)chatRoomCode
+{
+    NSArray* messages = [self fetchChatMessages];
+    
+    NSPredicate *chatRoomCodePredicate = [NSPredicate predicateWithFormat:@"chatRoomCode == %@", chatRoomCode];
+    NSArray *filteredArrayByChatCode = [messages filteredArrayUsingPredicate:chatRoomCodePredicate];
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"dateSent" ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+
+    NSArray *sortedArray = [filteredArrayByChatCode sortedArrayUsingDescriptors:sortDescriptors];
+    
+    NSMutableArray* arrayOfMessageDictionnaries = [NSMutableArray new];
+    
+    for (KEMChatMessage* chatMessage in sortedArray)
+    {
+        NSDictionary* message = @{@"message":chatMessage.content,
+                                  @"user":chatMessage.sender};
+        [arrayOfMessageDictionnaries addObject:message];
+    }
+    
+    return arrayOfMessageDictionnaries;
 }
 
 -(NSString*)obtainDateStringDDMMYYYY
@@ -169,7 +220,28 @@
     fbProfileInfo.fbRelationshipStatus = fbRelationship;
     fbProfileInfo.fbProfilePic = fbProfilePic;
     
+    KEMDailyPreference* dailyPreference;
+    
+    if (! [self.dailyPreferences objectForKey:date])
+    {
+        dailyPreference = [self createDailyPreference];
+    }
+    else
+    {
+        dailyPreference = [self.dailyPreferences objectForKey:date];
+    }
+    
+    if (! dailyPreference.fbName)
+    {
+        dailyPreference.fbName = fbName;
+        dailyPreference.fbLocation = fbCity;
+        dailyPreference.fbGender = fbGender;
+        dailyPreference.fbBirthDate = fbDOB;
+        dailyPreference.fbRelationshipStatus = fbRelationship;
+        dailyPreference.fbProfilePic = fbProfilePic;
+    }
     [self saveContext];
+//    [self saveContextWithoutPushingToParse];
 }
 
 -(void)fetchPreferencesOf:(NSString*)day
@@ -246,7 +318,10 @@
         [query getObjectInBackgroundWithId:dailyPreference.objID block:^(PFObject *preference, NSError *error)
         {
             [self setDailyPreferences:dailyPreference AndGeoPoint:geoPoint ForPreference:preference];
-            [preference saveEventually];
+            [preference saveEventually:^(BOOL succeeded, NSError *error)
+             {
+                    [self checkForMatchesComparingDate:date GeoPoint:geoPoint AndDailyPreference:dailyPreference];
+            }];
         }];
     }
     else
@@ -268,7 +343,8 @@
              }];
         }
     }
-    [self checkForMatchesComparingDate:date GeoPoint:geoPoint AndDailyPreference:dailyPreference];
+
+
 }
 
 -(void)obtainObjectIdForDailyPreference:(KEMDailyPreference*)dailyPreference
@@ -329,7 +405,11 @@
     preference[@"fbGender"] = [self returnNSNullIfNil:dailyPreference.fbGender];
     preference[@"fbBirthDate"] = [self returnNSNullIfNil:dailyPreference.fbBirthDate];
     preference[@"fbRelationship"] = [self returnNSNullIfNil:dailyPreference.fbRelationshipStatus];
-    preference[@"fbProfilePic"] = [self returnNSNullIfNil:dailyPreference.fbProfilePic];
+    
+    if (self.profilePicInString)
+    {
+        preference[@"fbProfilePic"] = self.profilePicInString;
+    }
 }
 
 -(NSDictionary*)createParametersFrom:(KEMDailyPreference*)dailyPreference AndGeoPoint:(PFGeoPoint*)geoPoint ForDate:(NSString*)date
@@ -372,11 +452,9 @@
                  
                  if (matchDistance <= tolerableDistance)
                  {
-                     KEMMatch* match = [self createKEMMatchFromResult:result];
-                     
-                     [self checkForDuplicatedAndAddMatch:match];
-                     
-                     [self saveContextWithoutPushingToParse];
+//                     KEMMatch* match = [self createKEMMatchFromResult:result];
+                     [self checkForDuplicatesBeforeMakingMatchFromResult:result];
+//                     [self checkForDuplicatedAndAddMatch:match];
                  }
              }
              //             return matches;
@@ -387,6 +465,121 @@
              NSLog(@"no funciona!");
          }
      }];
+}
+
+-(void)checkForDuplicatesBeforeMakingMatchFromResult:(PFObject*)result
+{
+    if ( ! self.matches)
+    {
+        [self fetchMatches];
+    }
+    
+    
+    
+    //    if ( ! self.matchesByDate[match.runDate])
+    //    {
+    //        [self.matches addObject:match];
+    //        [self.matchesByDate setObject:[NSMutableArray arrayWithObject:match] forKey:match.runDate];
+    //    }
+    //    else
+    //    {
+    
+    PFUser* user = result[@"user"];
+    
+    NSPredicate *objIdPredicate = [NSPredicate predicateWithFormat:@"objID == %@", user.objectId];
+    NSArray *filteredArrayByObjId = [self.matches filteredArrayUsingPredicate:objIdPredicate];
+    
+    NSPredicate *datePredicate = [NSPredicate predicateWithFormat:@"runDate == %@", result[@"date"]];
+    NSArray *filteredArrayByDateAndObjId = [filteredArrayByObjId filteredArrayUsingPredicate:datePredicate];
+    
+    if ([filteredArrayByDateAndObjId count] > 0)
+    {
+        NSInteger matchIndex=[self.matches indexOfObject:filteredArrayByDateAndObjId[0]];
+        
+        [self updateExistingMatch:self.matches[matchIndex] WithResult:result];
+        //instead of deleting how about updating?
+        
+//        [self.managedObjectContext deleteObject:self.matches[matchIndex]];
+//        self.matches[matchIndex] = match;
+        
+        NSInteger matchIndexInMatchDate = [self.matchesByDate[result[@"date"]] indexOfObject:filteredArrayByDateAndObjId[0]];
+        self.matchesByDate[result[@"date"]][matchIndexInMatchDate] = self.matches[matchIndex];
+    }
+    else
+    {
+        KEMMatch* match = [self createKEMMatchFromResult:result];
+        [self saveContextWithoutPushingToParse];
+        
+        [self.matches addObject:match];
+        
+        if (self.matchesByDate[result[@"date"]])
+        {
+            [ ((NSMutableArray*) self.matchesByDate[result[@"date"]]) addObject:match];
+        }
+        else
+        {
+            [self.matchesByDate setObject:[NSMutableArray arrayWithObject:match] forKey:result[@"date"]];
+        }
+        
+        if (self.notificationFromParse)
+        {
+            self.notificationFromParse = NO;
+        }
+        else
+        {
+            [self notifyThatMatchEventOccurredWithTitle:@"You have a new match!" AndMessage:@"Tap the Matches icon to find out who it is!"];
+            [self notifyMatchThatHeMustCheckMatches:user];
+        }
+
+    }
+}
+
+-(void)notifyMatchThatHeMustCheckMatches:(PFUser*)matchUser
+{
+    PFQuery* matchNotificationQuery = [PFInstallation query];
+    [matchNotificationQuery whereKey:@"user" equalTo:matchUser];
+    
+    PFPush *push = [[PFPush alloc] init];
+    [push setQuery:matchNotificationQuery];
+    
+    //if you change this, change the filter in appDelegate !!!!!
+/*if you change this, change the filter in appDelegate !!!!!*/ [push setMessage:@"You have a new match!"]; //if you change this, change the filter in appDelegate !!!!!
+    //if you change this, change the filter in appDelegate !!!!!
+    
+    [push sendPushInBackground];
+
+}
+
+-(void)updateExistingMatch:(KEMMatch*)match WithResult:(PFObject*)result
+{
+    PFUser* user = result[@"user"];
+    
+    match.objID = user.objectId;
+    match.conversationPreference = result[@"conversation"];
+    match.runDate = result[@"date"];
+    match.durationMax = result[@"durationMax"];
+    match.durationMin = result[@"durationMin"];
+    match.endTime = result[@"endTime"];
+    match.chosenLatitude = result[@"latitude"];
+    match.chosenLongitude = result[@"longitude"];
+    match.partnerMusicPreference = result[@"partnerMusic"];
+    match.personalMusicPreference = result[@"personalMusic"];
+    match.radiusTolerance = result[@"radius"];
+    match.startTime = result[@"startTime"];
+    match.averageSpeedKmH = result[@"averageSpeed"];
+    match.distanceMax = result[@"distanceMax"];
+    match.distanceMin = result[@"distanceMin"];
+    match.fastestSpeedKmH = result[@"fastestSpeed"];
+    match.slowestSpeedKmH = result[@"slowestSpeed"];
+    
+    match.fbName = result[@"fbName"];
+    match.fbLocation = result[@"fbCity"];
+    match.fbGender = result[@"fbGender"];
+    match.fbBirthDate = result[@"fbBirthDate"];
+    match.fbRelationshipStatus = result[@"fbRelationship"];
+    match.fbProfilePic= result[@"fbProfilePic"];
+    
+    [self saveContextWithoutPushingToParse];
 }
 
 -(KEMMatch*)createKEMMatchFromResult:(PFObject*)result
@@ -423,6 +616,7 @@
     return match;
 }
 -(void)checkForDuplicatedAndAddMatch:(KEMMatch*)match
+//no longer used because we want to check for duplicate before creating a match
 {
     if ( ! self.matches)
     {
@@ -492,7 +686,10 @@
             abort();
         }
     }
-    [self pushPreferencesToParse];
+    if ([PFUser currentUser])
+    {
+        [self pushPreferencesToParse];
+    }
 }
 
 - (void)saveContextWithoutPushingToParse

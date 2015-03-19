@@ -10,6 +10,8 @@
 #import <Parse/Parse.h>
 #import "KEMRightMessageCell.h"
 #import "KEMLeftMessageCell.h"
+#import "AppDelegate.h"
+#import "KEMDataStore.h"
 
 @interface KEMChatRoomVC ()
 
@@ -19,6 +21,7 @@
 @property (strong, nonatomic) UIButton *mediaButton;
 @property (strong, nonatomic) UILabel *subtitleView;
 @property (strong, nonatomic) UIBarButtonItem *settingsButton;
+@property (strong, nonatomic) UILabel *infoLabel;
 
 //jan
 @property (strong, nonatomic) UIView *usernameView;
@@ -31,6 +34,7 @@
 
 @property (nonatomic)CGRect keyBoardFrame;
 @property(strong,nonatomic)NSMutableArray *messages;
+@property (strong, nonatomic) KEMDataStore* dataStore;
 
 @end
 
@@ -40,12 +44,13 @@
 {
     [super viewDidLoad];
     
-    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background"]];
-    backgroundImage.frame=self.view.frame;
-    UIView* backgroundView = [[UIView alloc] initWithFrame:self.view.frame];
-    backgroundView.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:backgroundImage];
-    [self.view sendSubviewToBack:backgroundImage];
+//    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background"]];
+//    backgroundImage.frame=self.view.frame;
+//    UIView* backgroundView = [[UIView alloc] initWithFrame:self.view.frame];
+//    backgroundView.backgroundColor = [UIColor whiteColor];
+//    [self.view addSubview:backgroundImage];
+//    [self.view sendSubviewToBack:backgroundImage];
+    self.view.backgroundColor = [UIColor whiteColor];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.inputTextField.delegate=self;
@@ -58,6 +63,29 @@
                                                                           action:@selector(dismissKeyboard)];
     tap.cancelsTouchesInView = NO;
     [self.tableView addGestureRecognizer:tap];
+    self.tabBarController.tabBar.hidden = YES;
+
+    AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.inChatRoom = YES;
+    
+    self.messages = [[NSMutableArray alloc]initWithArray:@[]];
+    self.dataStore = [KEMDataStore sharedDataManager];
+    NSArray* savedMessages = [self.dataStore fetchChatMessagesForChatRoom:self.chatRoom.firebaseRoomName];
+    if ([savedMessages count]>0)
+    {
+        [self.messages addObjectsFromArray:savedMessages];
+    }
+    
+    if (![self.messages count] == 0)
+    {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.messages count]-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+    appDelegate.inChatRoom = NO;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -166,8 +194,22 @@
          if (completed)
          {
              [self.chatRoom setUpContentFirebaseWithCompletionBlock:^(BOOL completed)
-              {
-                  self.messages = self.chatRoom.messages;
+              {//refine this comparison; if the same text is sent twice, the 2nd won't show
+                  if ([ [self.messages lastObject][@"message"] isEqualToString:[self.chatRoom.messages lastObject][@"message"] ])
+                  {
+                      
+                  }
+                  else
+                  {
+                      if ([self.chatRoom.messages count]>0)
+                      {
+                          [self.messages addObject:[self.chatRoom.messages lastObject]];
+                          
+                          NSDictionary *message = [self.chatRoom.messages lastObject];
+                          [self.dataStore createChatMessage:message[@"message"] From:message[@"user"] For:self.chatRoom.firebaseRoomName Dated:[NSDate date]];
+                      }
+                     
+                
                   
                   [[NSOperationQueue mainQueue]addOperationWithBlock:^{
                       
@@ -177,6 +219,7 @@
                           [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.messages count]-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
                       }
                   }];
+                  }
               }];
          }
      }];
@@ -262,7 +305,8 @@
 
 
 //jan
--(void)toggleUsernameView{
+-(void)toggleUsernameView
+{
     if (self.usernameView.hidden)
     {
         [UIView transitionWithView:self.usernameView
@@ -458,21 +502,42 @@
 - (void)setupViewsAndConstraints
 {
     [self setupNavigationBar];
+    [self setUpInfoLabel];
     [self setupTableView];
     [self setupTextField];
     [self setupSendButton];
-    [self setupMediaButton];
-    [self setUpSettingsButton];
+//    [self setupMediaButton];
+//    [self setUpSettingsButton];
     [self setupUsernameView];
+}
+
+-(void)setUpInfoLabel
+{
+    self.infoLabel = [[UILabel alloc]initWithFrame:self.tabBarController.tabBar.frame];
+    self.infoLabel.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.infoLabel];
 }
 
 -(void)setupNavigationBar
 {
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage new]
+//    [ removeFromSuperview];
+//    [self.navigationController.navigationBar sendSubviewToBack:[self.navigationController.navigationBar.subviews lastObject]];
+
+//    UIImageView* newImageView = [[UIImageView alloc]initWithImage:[UIImage new]];
+//        newImageView.frame = CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
+//        newImageView.backgroundColor = [UIColor whiteColor];
+//        [self.navigationController.navigationBar addSubview:newImageView];
+
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"whiteImage"]
                                                   forBarMetrics:UIBarMetricsDefault];
+//
     self.navigationController.navigationBar.shadowImage = [UIImage new];
     self.navigationController.navigationBar.translucent = YES;
-    self.navigationItem.backBarButtonItem.enabled = YES;
+//    self.navigationItem.backBarButtonItem.enabled = YES;
+
+//    NSArray* array = [self.navigationController.navigationBar subviews];
+//    NSLog(@"subs %@", array);
+//    self.navigationController.navigationBar.subviews[1] = [[UIImageView alloc]initWithImage:[UIImage new]];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
@@ -599,9 +664,25 @@
         [self.chatRoom.contentFireBase setValue:@{@"user":self.userName,
                                                   @"message":message
                                                   }];
+        
+        PFQuery* chatMessageSentQuery = [PFInstallation query];
+        
+        if (self.matchUser)
+        {
+            [chatMessageSentQuery whereKey:@"user" equalTo:self.matchUser];
+            PFPush *push = [[PFPush alloc] init];
+            [push setQuery:chatMessageSentQuery];
+            
+            NSString* messageNotification = [NSString stringWithFormat:@"%@: %@",self.userName, message];
+            
+            [push setMessage:messageNotification];
+            
+            [push sendPushInBackground];
+        }
+
         self.inputTextField.text = @"";
     }
-    self.sendButton.backgroundColor=[UIColor colorWithRed:(4/255.0f) green:(74/255.0f) blue:(11/255.0f) alpha:1];
+    self.sendButton.backgroundColor=[UIColor orangeColor];//colorWithRed:(4/255.0f) green:(74/255.0f) blue:(11/255.0f) alpha:1];
     self.sendButton.titleLabel.textColor=[UIColor whiteColor];
 }
 
@@ -609,7 +690,7 @@
 {
     self.sendButton = [[UIButton alloc] init];
     [self.view addSubview:self.sendButton];
-    self.sendButton.backgroundColor=[UIColor colorWithRed:(4/255.0f) green:(74/255.0f) blue:(11/255.0f) alpha:1];
+    self.sendButton.backgroundColor=[UIColor orangeColor];//colorWithRed:(4/255.0f) green:(74/255.0f) blue:(11/255.0f) alpha:1];
     self.sendButton.layer.cornerRadius=10.0f;
     self.sendButton.layer.masksToBounds=YES;
     [self.sendButton setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Send" attributes:nil] forState:UIControlStateNormal];
@@ -634,7 +715,7 @@
                                                                            toItem:self.view
                                                                         attribute:NSLayoutAttributeBottom
                                                                        multiplier:1.0
-                                                                         constant:-4.0];
+                                                                         constant:-4.0]; //- self.tabBarController.tabBar.frame.size.height];//self.tabBarController.tabBar.frame];
     
     NSLayoutConstraint *sendButtonLeft = [NSLayoutConstraint constraintWithItem:self.sendButton
                                                                       attribute:NSLayoutAttributeLeft
@@ -714,7 +795,7 @@
     [self.view addSubview:self.inputTextField];
     self.inputTextField.layer.cornerRadius=10.0f;
     self.inputTextField.layer.masksToBounds=YES;
-    UIColor *borderColor=[UIColor colorWithRed:(4/255.0f) green:(74/255.0f) blue:(11/255.0f) alpha:1];
+    UIColor *borderColor=[UIColor colorWithRed:51/255.0f green:171/255.0f blue:249/255.0f alpha:0.7];//(4/255.0f) green:(74/255.0f) blue:(11/255.0f) alpha:1];
     self.inputTextField.layer.borderColor=[borderColor CGColor];
     self.inputTextField.layer.borderWidth=1.5f;
     self.inputTextField.backgroundColor=[UIColor clearColor];
@@ -738,15 +819,15 @@
                                                                           toItem:self.view
                                                                        attribute:NSLayoutAttributeBottom
                                                                       multiplier:1.0
-                                                                        constant:-4.0];
+                                                                        constant:-4.0 ];//- self.tabBarController.tabBar.frame.size.height];
     
     NSLayoutConstraint *textFieldLeft = [NSLayoutConstraint constraintWithItem:self.inputTextField
                                                                      attribute:NSLayoutAttributeLeft
                                                                      relatedBy:NSLayoutRelationEqual
-                                                                        toItem:self.tableView
+                                                                        toItem:self.view
                                                                      attribute:NSLayoutAttributeLeft
                                                                     multiplier:1.0
-                                                                      constant:40.0];
+                                                                      constant:4.0];
     
     NSLayoutConstraint *textFieldRight = [NSLayoutConstraint constraintWithItem:self.inputTextField
                                                                       attribute:NSLayoutAttributeRight
