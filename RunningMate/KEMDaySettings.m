@@ -29,6 +29,10 @@
 @property (nonatomic) NSInteger count;
 @property (strong, nonatomic) KEMDataStore* dataStore;
 @property (strong, nonatomic) KEMDailyPreference* preferenceOfTheDay;
+@property (strong, nonatomic) UIButton* saveButton;
+@property (strong, nonatomic) UIImageView *titleImageView;
+// not working so //out
+//@property (strong, nonatomic) UIView *titleView;
 
 @property(strong,nonatomic) CLLocationManager* locationManager;
 #define IS_OS_8_OR_LATER ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
@@ -52,13 +56,22 @@
     self.edgesForExtendedLayout = UIRectEdgeAll;
     self.tableView.contentInset = UIEdgeInsetsMake(/*CGRectGetHeight(self.navigationController.navigationBar.frame)*/ + [UIApplication sharedApplication].statusBarFrame.size.height, 0.0f, CGRectGetHeight(self.tabBarController.tabBar.frame), 0.0f);
     
-    UIImageView *tileImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"logo"]];
+    // not working so //out
+//    self.titleView = [[UIView alloc]initWithFrame:self.navigationController.navigationBar.frame];
+//    self.titleView.backgroundColor = [UIColor blueColor];
+//    self.titleView.bounds = self.navigationController.navigationBar.bounds;
+    self.titleImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"logo"]];
 
-        tileImageView.frame = CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
-        [self.navigationController.navigationBar addSubview:tileImageView];
+    self.titleImageView.frame = CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width * 4/5, self.navigationController.navigationBar.frame.size.height * 4/5);
+
+    [self.navigationController.navigationBar addSubview:self.titleImageView];
+//    [self.titleView addSubview:self.titleImageView];
+//    [self positionTitleLogo];
     
-    self.locationManager = [[CLLocationManager alloc] init];
-        [self.locationManager  requestWhenInUseAuthorization];
+    [self SetUpSaveButton];
+//    [self positionSaveButton];
+    
+//    [self.navigationController.navigationBar addSubview:self.titleView];
     
     
     UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"background*"]];
@@ -101,7 +114,123 @@
     {
         [self alertIfNotLoggedIn];
     }
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)positionTitleLogo
+// not working so //out
+{
+//    self.titleImageView.translatesAutoresizingMaskIntoConstraints = NO;
+//    
+//    NSLayoutConstraint *logoHeight = [NSLayoutConstraint constraintWithItem:self.titleImageView
+//                                                                  attribute:NSLayoutAttributeHeight
+//                                                                  relatedBy:NSLayoutRelationEqual
+//                                                                     toItem:self.titleView
+//                                                                  attribute:NSLayoutAttributeHeight
+//                                                                 multiplier:4/5
+//                                                                   constant:0];
+//    
+//    NSLayoutConstraint *logoLeft = [NSLayoutConstraint constraintWithItem:self.titleImageView
+//                                                               attribute:NSLayoutAttributeLeft
+//                                                               relatedBy:NSLayoutRelationEqual
+//                                                                  toItem:self.titleView
+//                                                               attribute:NSLayoutAttributeLeft
+//                                                              multiplier:1
+//                                                                constant:0];
+//    
+//    NSLayoutConstraint *logoWidth = [NSLayoutConstraint constraintWithItem:self.titleImageView
+//                                                                 attribute:NSLayoutAttributeWidth
+//                                                                 relatedBy:NSLayoutRelationEqual
+//                                                                    toItem:self.titleView
+//                                                                 attribute:NSLayoutAttributeWidth
+//                                                                multiplier:4/5
+//                                                                  constant:0.0];
+//    
+//    NSLayoutConstraint *logoCenterY = [NSLayoutConstraint constraintWithItem:self.titleImageView
+//                                                                   attribute:NSLayoutAttributeCenterY
+//                                                                   relatedBy:NSLayoutRelationEqual
+//                                                                      toItem:self.titleView
+//                                                                   attribute:NSLayoutAttributeCenterY
+//                                                                  multiplier:1.0
+//                                                                    constant:0.0];
+//    
+//    [self.titleView addConstraints:@[logoCenterY,logoHeight,logoWidth,logoLeft]];
+}
+
+-(void)SetUpSaveButton
+{
+    self.saveButton = [[UIButton alloc]initWithFrame:CGRectMake(self.navigationController.navigationBar.frame.size.width* 4/5, 0, self.navigationController.navigationBar.frame.size.width * 1/5 - 4, self.navigationController.navigationBar.frame.size.height * 4/5)];
+    [self.saveButton setTitle:@"Save" forState:UIControlStateNormal];
+    self.saveButton.backgroundColor = [UIColor colorWithRed:51/255.0f green:171/255.0f blue:249/255.0f alpha:0.7];
+    [self.saveButton addTarget:self action:@selector(saveDataAndPushToParse) forControlEvents:UIControlEventTouchUpInside];
+    [self.saveButton addTarget:self action:@selector(saveButtonTapped) forControlEvents:UIControlEventTouchDown];
     
+    self.saveButton.layer.masksToBounds = YES;
+    self.saveButton.layer.cornerRadius = 10.0f;
+    UIColor *borderColor=[UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    self.saveButton.layer.borderColor =[borderColor CGColor];
+    self.saveButton.layer.borderWidth = 1.0f;
+    self.saveButton.titleLabel.textColor = [UIColor whiteColor];
+    
+    [self.navigationController.navigationBar addSubview:self.saveButton];
+}
+
+-(void)positionSaveButton
+// not working so //out
+{
+//    self.saveButton.translatesAutoresizingMaskIntoConstraints = NO;
+//    
+//    NSLayoutConstraint *logoHeight = [NSLayoutConstraint constraintWithItem:self.saveButton
+//                                                                  attribute:NSLayoutAttributeHeight
+//                                                                  relatedBy:NSLayoutRelationEqual
+//                                                                     toItem:self.titleView
+//                                                                  attribute:NSLayoutAttributeHeight
+//                                                                 multiplier:4/5
+//                                                                   constant:0];
+//    
+//    NSLayoutConstraint *logoLeft = [NSLayoutConstraint constraintWithItem:self.saveButton
+//                                                                attribute:NSLayoutAttributeLeft
+//                                                                relatedBy:NSLayoutRelationEqual
+//                                                                   toItem:self.titleImageView
+//                                                                attribute:NSLayoutAttributeRight
+//                                                               multiplier:1
+//                                                                 constant:0];
+//    
+//    NSLayoutConstraint *logoWidth = [NSLayoutConstraint constraintWithItem:self.saveButton
+//                                                                 attribute:NSLayoutAttributeWidth
+//                                                                 relatedBy:NSLayoutRelationEqual
+//                                                                    toItem:self.titleView
+//                                                                 attribute:NSLayoutAttributeWidth
+//                                                                multiplier:1/5
+//                                                                  constant:0.0];
+//    
+//    NSLayoutConstraint *logoCenterY = [NSLayoutConstraint constraintWithItem:self.saveButton
+//                                                                   attribute:NSLayoutAttributeCenterY
+//                                                                   relatedBy:NSLayoutRelationEqual
+//                                                                      toItem:self.titleView
+//                                                                   attribute:NSLayoutAttributeCenterY
+//                                                                  multiplier:1.0
+//                                                                    constant:0.0];
+//    
+//    [self.titleView addConstraints:@[logoCenterY,logoHeight,logoWidth,logoLeft]];
+}
+
+-(void)saveDataAndPushToParse
+{
+    self.saveButton.backgroundColor=[UIColor colorWithRed:51/255.0f green:171/255.0f blue:249/255.0f alpha:0.7];
+    if ([PFUser currentUser])
+    {
+        [self.dataStore pushPreferencesToParse];
+    }
+}
+
+-(void)saveButtonTapped
+{
+    self.saveButton.backgroundColor=[UIColor colorWithRed:0.016 green:0.341 blue:0.22 alpha:0.5];
 }
 
 -(void)alertIfNotLoggedIn

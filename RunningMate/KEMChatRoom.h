@@ -10,6 +10,7 @@
 #import <Firebase/Firebase.h>
 #import "KEMMatch.h"
 #import <UIKit/UIKit.h>
+
 @interface KEMChatRoom : NSObject
 
 @property(strong,nonatomic) KEMMatch* user;
@@ -23,7 +24,6 @@
 @property(strong,nonatomic)Firebase *nameSwitchFireBase;
 @property(strong,nonatomic)NSNumber* userCount;
 @property(nonatomic) BOOL firstTimeInRoom;
-@property(nonatomic, strong) UILocalNotification* chatNotification;
 
 @property(strong,nonatomic)NSString *matchName;
 

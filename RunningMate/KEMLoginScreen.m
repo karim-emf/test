@@ -267,7 +267,6 @@
     [self presentViewController:detailsViewController animated:YES completion:^{
         
     }];
-//    [self.navigationController pushViewController:detailsViewController animated:animated];
 }
 
 

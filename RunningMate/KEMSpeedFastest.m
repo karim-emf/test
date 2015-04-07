@@ -50,6 +50,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 -(void)setToAverageSpeed
 {
     NSDate *now = [NSDate date];

@@ -28,6 +28,8 @@
 @property (strong, nonatomic) NSString* userName;
 @property (strong, nonatomic) PFUser* matchUser;
 
+@property (strong, nonatomic) NSMutableArray* blinkingCellIdentifyers;
+
 @end
 
 @implementation KEMMatchesTVC
@@ -41,29 +43,31 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     self.edgesForExtendedLayout = UIRectEdgeAll;
     self.tableView.contentInset = UIEdgeInsetsMake(/*CGRectGetHeight(self.navigationController.navigationBar.frame)*/ + [UIApplication sharedApplication].statusBarFrame.size.height, 0.0f, CGRectGetHeight(self.tabBarController.tabBar.frame), 0.0f);
     
-self.logoImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"logo"]];
+    self.logoImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"logo"]];
     
-self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
-
+    self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigationBar.frame.size.width, self.navigationController.navigationBar.frame.size.height);
+    
     [self.navigationController.navigationBar addSubview:self.logoImageView];
-//    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
-//    [self.navigationController.navigationBar sendSubviewToBack:tileImageView];
-
+    //    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+    //    [self.navigationController.navigationBar sendSubviewToBack:tileImageView];
+    
     
     self.dataStore = [KEMDataStore sharedDataManager];
     [self.dataStore fetchMatches];
-    self.matches = self.dataStore.matches;
+    self.matches = self.dataStore.matches;//might not even need this
     self.matchesByDate =self.dataStore.matchesByDate;
     
     KEMFbProfileInfo* fbProfileInfo = [self.dataStore fetchFbProfileInfo];
     self.userName = [self shortenName:fbProfileInfo.fbName];
     
-
+    
+    
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -74,6 +78,68 @@ self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigation
     {
         [self alertIfNotLoggedIn];
     }
+    
+    self.blinkingCellIdentifyers = [@[] mutableCopy];
+    
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self selector:@selector(addIdentifyerForBlinkingCell:) name:@"chatReceived" object:nil];
+    [notificationCenter addObserver:self selector:@selector(callReloadData) name:@"newMatch" object:nil];
+}
+
+-(void)callReloadData
+{
+    [self.tableView reloadData];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(NSDate*)convertStringToNSDate:(NSString*)dateString
+{
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    // this is imporant - we set our input date format to match our input string
+    // if format doesn't match you'll get nil from your string, so be careful
+    [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+    NSDate *dateFromString = [[NSDate alloc] init];
+    // voila!
+    dateFromString = [dateFormatter dateFromString:dateString];
+    return dateFromString;
+    
+    /*
+     
+REVERSE
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy"];
+    NSString *stringDate = [dateFormatter stringFromDate:[NSDate date]];
+    NSLog(@"%@", stringDate);
+     */
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+//    UIViewController* matchVC = self.tabBarController.viewControllers[1];
+
+    self.tabBarItem.image = [UIImage imageNamed:@"message-7"];
+    [self.tabBarItem setTitle:@"Matches"];
+
+    [self.tabBarItem setTitleTextAttributes:@{
+                                                 NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue" size:10.0f],
+                                                 NSForegroundColorAttributeName: [UIColor grayColor]
+                                                 }
+                                   forState:UIControlStateNormal];
+    
+    [self.tabBarItem setTitleTextAttributes:@{
+                                              NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue" size:10.0f],
+                                              NSForegroundColorAttributeName: [UIColor whiteColor]
+                                              }
+                                   forState:UIControlStateSelected];
+    
+
+
 }
 
 -(void)alertIfNotLoggedIn
@@ -124,7 +190,8 @@ self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigation
     self.matches = [[NSMutableArray alloc]initWithArray:@[]];
     for (NSString* date in sortedMatchDates)
     {
-        [self.matches addObject:date];
+        NSDate* convertedDate = [self convertStringToNSDate:date];
+        [self.matches addObject:convertedDate];
         [self.matches addObjectsFromArray:self.matchesByDate[date]];
     }
     return [self.matches count];
@@ -132,7 +199,7 @@ self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigation
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[self.matches[indexPath.row] class] isSubclassOfClass:[NSString class]])
+    if ([[self.matches[indexPath.row] class] isSubclassOfClass:[NSDate class]])
     {
         KEMMatchDateCell* cell = (KEMMatchDateCell*)[tableView dequeueReusableCellWithIdentifier:@"matchDateCell"];
         
@@ -141,6 +208,7 @@ self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigation
             cell = [[KEMMatchDateCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"matchDateCell"];
         }
         cell.dateLabel.text = self.matches[indexPath.row];
+        
         return  cell;
 //        stdCell.textLabel.text = self.matches[indexPath.row];
     }
@@ -162,10 +230,58 @@ self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigation
         {
             cell.profilePicView.image = [self stringToUIImage:((KEMMatch*)self.matches[indexPath.row]).fbProfilePic];
         }
+        
+        if ([self.blinkingCellIdentifyers containsObject:@(indexPath.row)])
+        {
+            [self blinkCell:cell];
+        }
+
         return  cell;
 //        stdCell.textLabel.text =[self shortenName:((KEMMatch*)self.matches[indexPath.row]).fbName];
     }
 }
+
+- (void) addIdentifyerForBlinkingCell:(NSNotification *)notification
+{
+        NSNumber* identifyer = notification.userInfo[@"row"];
+    [self.blinkingCellIdentifyers addObject:identifyer];
+    [self.tableView reloadData];
+}
+- (void) blinkCell:(UITableViewCell*)cell
+{
+//    NSInteger row = [notification.userInfo[@"row"] integerValue];
+//    NSIndexPath* indexPath = [NSIndexPath indexPathForItem:row inSection:0];
+//    UITableViewCell *cell = [[self tableView] cellForRowAtIndexPath:indexPath];
+    [self performCellBlink:cell];
+}
+
+- (void) performCellBlink: (UITableViewCell*) cell
+{
+    cell.backgroundColor = [UIColor yellowColor];
+    [self performSelector:@selector(continueCellBlink:) withObject:cell afterDelay:0.3];
+}
+
+- (void) continueCellBlink: (UITableViewCell*) cell
+{
+    NSIndexPath* cellIP = [[self tableView] indexPathForCell:cell];
+    
+    if ([self.blinkingCellIdentifyers containsObject:@(cellIP.row)])
+    {
+        cell.backgroundColor = [UIColor clearColor];
+        [self performSelector:@selector(performCellBlink:) withObject:cell afterDelay:0.3];
+    }
+    else
+    {
+        [self endCellBlink:cell];
+    }
+}
+
+- (void) endCellBlink: (UITableViewCell*) cell
+{
+    cell.backgroundColor = [UIColor clearColor];
+}
+
+
 
 -(UIImage *)stringToUIImage:(NSString *)string
 {
@@ -183,8 +299,9 @@ self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigation
         NSString* firstName = [firstAndLastStrings objectAtIndex:0];
         NSString* middleName = [firstAndLastStrings objectAtIndex:1];
         NSString* lastName = [firstAndLastStrings objectAtIndex:2];
+        char middleInitialChar = [middleName characterAtIndex:0];
         char lastInitialChar = [lastName characterAtIndex:0];
-        NSString* newNameStr = [NSString stringWithFormat:@"%@ %@ %c.", firstName, middleName, lastInitialChar];
+        NSString* newNameStr = [NSString stringWithFormat:@"%@ %c %c.", firstName, middleInitialChar, lastInitialChar];
         return newNameStr;
     }
     else
@@ -197,35 +314,19 @@ self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigation
     }
 }
 
-//-(NSString*)shortenNameOfMatch:(KEMMatch*)match
-//{
-//    NSString* nameStr = match.fbName;
-//    NSArray* firstAndLastStrings = [nameStr componentsSeparatedByString:@" "];
-//    
-//    if ([firstAndLastStrings count] > 2)
-//    {
-//        NSString* firstName = [firstAndLastStrings objectAtIndex:0];
-//        NSString* middleName = [firstAndLastStrings objectAtIndex:1];
-//        NSString* lastName = [firstAndLastStrings objectAtIndex:2];
-//        char lastInitialChar = [lastName characterAtIndex:0];
-//        NSString* newNameStr = [NSString stringWithFormat:@"%@ %@ %c.", firstName, middleName, lastInitialChar];
-//        return newNameStr;
-//    }
-//    else
-//    {
-//        NSString* firstName = [firstAndLastStrings objectAtIndex:0];
-//        NSString* lastName = [firstAndLastStrings objectAtIndex:1];
-//        char lastInitialChar = [lastName characterAtIndex:0];
-//        NSString* newNameStr = [NSString stringWithFormat:@"%@ %c.", firstName, lastInitialChar];
-//        return newNameStr;
-//    }
-//}
+
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ( ! [[self.matches[indexPath.row] class] isSubclassOfClass:[NSString class]])
     {
+        if ([self.blinkingCellIdentifyers containsObject:@(indexPath.row)])
+        {
+            [self.blinkingCellIdentifyers removeObject:@(indexPath.row)];
+        }
+        
+        
         KEMMatch* selectedMatch = self.matches[indexPath.row];
         self.chatRoom=[[KEMChatRoom alloc]init];
         
@@ -251,6 +352,7 @@ self.logoImageView.frame = CGRectMake(0, 0, self.navigationController.navigation
             [self.navigationController.navigationBar sendSubviewToBack:self.logoImageView];
             [self.navigationController pushViewController:destinationViewController animated:YES];
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self endCellBlink:[[self tableView] cellForRowAtIndexPath:indexPath]];
         }];
         
     }

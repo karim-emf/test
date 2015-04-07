@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		733FB31E8B598A30BD59F5EB /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7563B6B3473612499345ABB8 /* libPods.a */; };
+		8A212AA71ACFA74400BD890F /* KEMFirebaseLiaison.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A212AA61ACFA74400BD890F /* KEMFirebaseLiaison.m */; };
+		8A212AA91ACFB7D000BD890F /* message!.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A212AA81ACFB7D000BD890F /* message!.png */; };
 		8A4665961AB623FA00DE1748 /* paper-piece-minus-7.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A4665951AB623FA00DE1748 /* paper-piece-minus-7.png */; };
 		8A4665991AB6700900DE1748 /* KEMMatchIDCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4665981AB6700900DE1748 /* KEMMatchIDCell.m */; };
 		8A46659C1AB6701B00DE1748 /* KEMMatchDateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A46659B1AB6701B00DE1748 /* KEMMatchDateCell.m */; };
@@ -93,6 +95,7 @@
 		8AC6E41F1ABA600F00C1E9D8 /* TableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AC6E41E1ABA600F00C1E9D8 /* TableHeaderView.xib */; };
 		8AE39E901A7F23DC0024DF30 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AE39E8F1A7F23DC0024DF30 /* MapKit.framework */; };
 		8AE39E931A7F26EF0024DF30 /* KJDMapKitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AE39E921A7F26EF0024DF30 /* KJDMapKitViewController.m */; };
+		8AFE76671AC4866C00375ACC /* KEMParseLiaison.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AFE76661AC4866C00375ACC /* KEMParseLiaison.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +111,9 @@
 /* Begin PBXFileReference section */
 		05A78243B95B6720152095D7 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		7563B6B3473612499345ABB8 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A212AA51ACFA74400BD890F /* KEMFirebaseLiaison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMFirebaseLiaison.h; sourceTree = "<group>"; };
+		8A212AA61ACFA74400BD890F /* KEMFirebaseLiaison.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMFirebaseLiaison.m; sourceTree = "<group>"; };
+		8A212AA81ACFB7D000BD890F /* message!.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message!.png"; sourceTree = "<group>"; };
 		8A4665951AB623FA00DE1748 /* paper-piece-minus-7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "paper-piece-minus-7.png"; sourceTree = "<group>"; };
 		8A4665971AB6700900DE1748 /* KEMMatchIDCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMMatchIDCell.h; sourceTree = "<group>"; };
 		8A4665981AB6700900DE1748 /* KEMMatchIDCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMMatchIDCell.m; sourceTree = "<group>"; };
@@ -229,6 +235,8 @@
 		8AE39E8F1A7F23DC0024DF30 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		8AE39E911A7F26EF0024DF30 /* KJDMapKitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KJDMapKitViewController.h; sourceTree = "<group>"; };
 		8AE39E921A7F26EF0024DF30 /* KJDMapKitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KJDMapKitViewController.m; sourceTree = "<group>"; };
+		8AFE76651AC4866C00375ACC /* KEMParseLiaison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KEMParseLiaison.h; sourceTree = "<group>"; };
+		8AFE76661AC4866C00375ACC /* KEMParseLiaison.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KEMParseLiaison.m; sourceTree = "<group>"; };
 		F0E0F390DDE84B527C4704C3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -459,6 +467,10 @@
 				8A4864011A7AAFC6002D4039 /* KEMTabBarController.m */,
 				8AB70D991A97DC7300A448D6 /* KEMDataStore.h */,
 				8AB70D9A1A97DC7300A448D6 /* KEMDataStore.m */,
+				8AFE76651AC4866C00375ACC /* KEMParseLiaison.h */,
+				8AFE76661AC4866C00375ACC /* KEMParseLiaison.m */,
+				8A212AA51ACFA74400BD890F /* KEMFirebaseLiaison.h */,
+				8A212AA61ACFA74400BD890F /* KEMFirebaseLiaison.m */,
 				8AB70D9C1A97DC8800A448D6 /* Model.xcdatamodeld */,
 				8A4665D01AB9616300DE1748 /* managedObjects */,
 				8ABE992C1AAFEADD00294F42 /* KEMChatRoom.h */,
@@ -480,6 +492,7 @@
 				8ABE993F1AB38DCD00294F42 /* selectedPin.png */,
 				8A4E66981AA590C900167D59 /* calendar-7.png */,
 				8A4E66961AA5908100167D59 /* message-7.png */,
+				8A212AA81ACFB7D000BD890F /* message!.png */,
 				8A4E66941AA5907100167D59 /* note-write-7.png */,
 				8A4665951AB623FA00DE1748 /* paper-piece-minus-7.png */,
 				8A4E66921AA5906000167D59 /* paper-piece-tick-7.png */,
@@ -616,6 +629,7 @@
 				8ABE99401AB38DCD00294F42 /* selectedPin.png in Resources */,
 				8A4E66911AA5905700167D59 /* paper-piece-plus-7.png in Resources */,
 				8ABE99421AB38EB900294F42 /* stdPin.png in Resources */,
+				8A212AA91ACFB7D000BD890F /* message!.png in Resources */,
 				8A4E66861AA54A4B00167D59 /* conceDesembocadura.png in Resources */,
 				8A4E66831AA5433A00167D59 /* conceBosque.png in Resources */,
 				8A5B5F1B1A8F2DA800E957E2 /* selectedPin-old.png in Resources */,
@@ -684,6 +698,7 @@
 				8ABE992B1AAFDCC400294F42 /* KEMChatRoomVC.m in Sources */,
 				8ABE91C81AA823DC002836EB /* KEMSpeedFastest.m in Sources */,
 				8A4864101A7D7543002D4039 /* KEMDurationRangeCell.m in Sources */,
+				8A212AA71ACFA74400BD890F /* KEMFirebaseLiaison.m in Sources */,
 				8A4665BD1AB7FA6100DE1748 /* KEMFbProfileInfo.m in Sources */,
 				8A4864221A7D8499002D4039 /* KEMPartnerMusicPreferenceCell.m in Sources */,
 				8ABE99341AAFEDAF00294F42 /* KEMLeftMessageCell.m in Sources */,
@@ -709,6 +724,7 @@
 				8AB70D9B1A97DC7300A448D6 /* KEMDataStore.m in Sources */,
 				8A4864081A7C3935002D4039 /* KEMTimeRangeCell.m in Sources */,
 				8ABE993A1AB20E3D00294F42 /* KEMLocationVC.m in Sources */,
+				8AFE76671AC4866C00375ACC /* KEMParseLiaison.m in Sources */,
 				8ABE91D41AA9680E002836EB /* UserDetailsViewController.m in Sources */,
 				8A4863DA1A7AA4D4002D4039 /* main.m in Sources */,
 			);

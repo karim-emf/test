@@ -13,7 +13,7 @@
 @interface KJDMapKitViewController : UIViewController <CLLocationManagerDelegate, MKMapViewDelegate>
 
 @property (strong, nonatomic) MKMapView* mapView;
-@property(strong,nonatomic) CLLocationManager* locationManager;
+@property (strong,nonatomic) CLLocationManager* locationManager;
 @property (strong,nonatomic) CLLocation *currentCoordinates;
 
 @property(strong, nonatomic) NSMutableArray* placemarks;

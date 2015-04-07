@@ -32,16 +32,9 @@
     [self.locationManager setDesiredAccuracy:kCLDistanceFilterNone];
 
     
-    #ifdef __IPHONE_8_0
-    if(IS_OS_8_OR_LATER)
-//    if ([CLLocationManager instancesRespondToSelector:@selector(requestWhenInUseAuthorization)])
-    {
-        [self.locationManager  requestWhenInUseAuthorization];
-//        [self.locationManager requestAlwaysAuthorization];
-        //didnt work bc needed the requestAlwaysAuth in the plist since it had been requested at first with this.
-        [self.locationManager startUpdatingLocation];
-    }
-    #endif
+//    #ifdef __IPHONE_8_0
+//    if(IS_OS_8_OR_LATER)
+//    #endif
     
     [self setUpMapView];
     

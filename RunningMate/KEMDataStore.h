@@ -24,7 +24,6 @@
 @property (strong, nonatomic) NSMutableArray* matches;
 @property (strong, nonatomic) NSMutableDictionary* matchesByDate;
 
-//@property (strong, nonatomic) PFObject *testObject;
 @property (strong, nonatomic) NSString* objectID;
 @property (strong, nonatomic) NSString* profilePicInString;
 

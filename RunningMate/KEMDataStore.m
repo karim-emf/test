@@ -162,8 +162,6 @@
     [self saveContext];
 }
 
-
-
 -(void)addPartnerMusicResponse:(NSNumber*)response ToPreferenceFor:(NSString*)day
 {
     KEMDailyPreference* dailyPreference = [self.dailyPreferences objectForKey:day];
@@ -275,7 +273,6 @@
     NSArray* fetchedMatches = [self.managedObjectContext executeFetchRequest:fetchRequest error:nil];
     
     self.matches = [NSMutableArray arrayWithArray:fetchedMatches];
-    
     
     for (KEMMatch* match in fetchedMatches)
     {
@@ -473,16 +470,7 @@
     {
         [self fetchMatches];
     }
-    
-    
-    
-    //    if ( ! self.matchesByDate[match.runDate])
-    //    {
-    //        [self.matches addObject:match];
-    //        [self.matchesByDate setObject:[NSMutableArray arrayWithObject:match] forKey:match.runDate];
-    //    }
-    //    else
-    //    {
+
     
     PFUser* user = result[@"user"];
     
@@ -529,8 +517,10 @@
         {
             [self notifyThatMatchEventOccurredWithTitle:@"You have a new match!" AndMessage:@"Tap the Matches icon to find out who it is!"];
             [self notifyMatchThatHeMustCheckMatches:user];
+            
+            NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+            [notificationCenter postNotificationName:@"newMatch" object:nil];
         }
-
     }
 }
 
@@ -622,16 +612,7 @@
     {
         [self fetchMatches];
     }
-    
 
-    
-//    if ( ! self.matchesByDate[match.runDate])
-//    {
-//        [self.matches addObject:match];
-//        [self.matchesByDate setObject:[NSMutableArray arrayWithObject:match] forKey:match.runDate];
-//    }
-//    else
-//    {
         NSPredicate *objIdPredicate = [NSPredicate predicateWithFormat:@"objID == %@", match.objID];
         NSArray *filteredArrayByObjId = [self.matches filteredArrayUsingPredicate:objIdPredicate];
         NSPredicate *datePredicate = [NSPredicate predicateWithFormat:@"runDate == %@", match.runDate];
@@ -686,10 +667,10 @@
             abort();
         }
     }
-    if ([PFUser currentUser])
-    {
-        [self pushPreferencesToParse];
-    }
+//    if ([PFUser currentUser])
+//    {
+//        [self pushPreferencesToParse];
+//    }
 }
 
 - (void)saveContextWithoutPushingToParse

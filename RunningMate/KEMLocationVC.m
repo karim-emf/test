@@ -46,6 +46,10 @@
     [self setUpTapRecognizers];
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 -(void)setToLastLocation
 {
@@ -186,7 +190,7 @@
 
 -(void)setUpLocationPick
 {
-    NSArray* preferences = @[@"Current Location", @"Point on map", @"Search a Location"];
+    NSArray* preferences = @[@"Current", @"Point", @"Search"];
     self.locationStylePick =[[UISegmentedControl alloc]initWithItems:preferences];
     [self.locationStylePick addTarget:self action:@selector(locationStylePicked) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.locationStylePick];
@@ -511,8 +515,18 @@
 -(void)setUpMapKitView
 {
     self.mapKitView = [[KJDMapKitViewController alloc] init];
-    [self.mapKitView viewWillAppear:NO];
+//    [self.mapKitView viewWillAppear:NO];
     [self.mapKitView viewDidLoad];
+    
+    //removed this from KJDMapKitViewController and seems to be working fine now; before changing this, the location prompt would disappear immediately.
+    if ([CLLocationManager instancesRespondToSelector:@selector(requestWhenInUseAuthorization)])
+    {
+        [self.mapKitView.locationManager  requestWhenInUseAuthorization];
+        //        [self.locationManager requestAlwaysAuthorization];
+        //didnt work bc needed the requestAlwaysAuth in the plist since it had been requested at first with this.
+        [self.mapKitView.locationManager startUpdatingLocation];
+    }
+
     
     self.mapView = self.mapKitView.mapView;
     self.mapView.delegate = self.mapKitView;

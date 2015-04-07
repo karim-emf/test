@@ -96,7 +96,7 @@ self.fbButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.w
 {
     self.fbButton.backgroundColor=[UIColor colorWithRed:(59/255.0) green:(89/255.0) blue:(152/255.0) alpha:1];
     self.fbButton.titleLabel.textColor=[UIColor whiteColor];
-
+    
     [self dismissViewControllerAnimated:YES completion:^{
         
         PFInstallation *installation = [PFInstallation currentInstallation];
@@ -104,6 +104,11 @@ self.fbButton = [[UIButton alloc]initWithFrame:CGRectMake(self.view.frame.size.w
         [installation saveInBackground];
         
         [self.dataStore addUserName:self.nameToStore UserCity:self.locationToStore UserGender:self.genderToStore UserDOB:self.bdayToStore UserRelationship:self.relationshipToStore AndProfilePicture:self.pictureToStoreInString ForDate:[self obtainDateStringDDMMYYYY]];
+        
+        if ([PFUser currentUser])
+        {
+            [self.dataStore pushPreferencesToParse];
+        }
     }];
 }
 
